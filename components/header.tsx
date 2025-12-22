@@ -46,20 +46,19 @@ const Header = ({ className, ...props }: HeaderProps) => {
       <header
         className={
           (cn(
-            'flex w-full flex-col border-0 border-b border-solid border-input'
-            // 'sticky left-0 top-0 z-10'
+            'sticky left-0 top-0 z-50 flex w-full flex-col border-0 border-b border-solid border-input bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
           ),
           className)
         }
         {...props}
       >
-        <div className="container flex h-[60px] items-center">
+        <div className="container flex h-16 items-center">
           <SheetTrigger asChild>
             <Button
               type="button"
               className="md:hidden"
               size="icon"
-              variant="outline"
+              variant="ghost"
             >
               <LucideIcon name="Menu" className="size-6 min-w-6" />
               <span className="sr-only">Toggle navigation menu</span>
@@ -67,7 +66,7 @@ const Header = ({ className, ...props }: HeaderProps) => {
           </SheetTrigger>
           <SiteBrand className="mr-6 hidden md:flex" />
           <Navigation />
-          <div className="ml-auto flex gap-2">
+          <div className="ml-auto flex items-center gap-3">
             {pathname !== '/' ? (
               <SearchForm
                 path="/search"
@@ -101,23 +100,31 @@ const SignedOutNav = () => {
   const { t } = useTranslation()
 
   return (
-    <>
+    <div className="flex items-center gap-2">
       <Button
-        variant="outline"
-        className="w-10 sm:w-auto"
+        variant="ghost"
+        className="hidden sm:flex"
         onClick={() => router.push('/auth/signin')}
       >
-        <LucideIcon name="LogIn" className="size-5 min-w-5 sm:hidden" />
-        <span className="hidden sm:inline">{t('signin')}</span>
+        {t('signin')}
       </Button>
       <Button
-        className="w-10 sm:w-auto"
+        className="gap-2 shadow-sm"
         onClick={() => router.push('/auth/signup')}
       >
-        <LucideIcon name="UserPlus" className="size-5 min-w-5 sm:hidden" />
-        <span className="hidden sm:inline">{t('signup')}</span>
+        <LucideIcon name="UserPlus" className="h-4 w-4" />
+        <span>{t('signup')}</span>
       </Button>
-    </>
+      {/* Mobile signin button */}
+      <Button
+        variant="outline"
+        size="icon"
+        className="sm:hidden"
+        onClick={() => router.push('/auth/signin')}
+      >
+        <LucideIcon name="LogIn" className="h-5 w-5" />
+      </Button>
+    </div>
   )
 }
 

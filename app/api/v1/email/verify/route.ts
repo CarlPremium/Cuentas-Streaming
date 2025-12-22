@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidates } from '@/lib/utils'
+import { ApiError } from '@/lib/utils'
+import { revalidates } from '@/lib/utils/cache'
 import { authorize } from '@/queries/server/auth'
 
 import { transporter, sender } from '@/lib/nodemailer'

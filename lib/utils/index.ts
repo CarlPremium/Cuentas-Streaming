@@ -1,6 +1,7 @@
 export { cn } from './tailwind'
 export { fetcher } from './fetcher'
-export { revalidates, revalidatePaths, revalidateTags } from './cache'
+// Cache functions moved to separate server-only file
+// Import from '@/lib/utils/cache' directly in API routes
 export { setCookie, getCookie, deleteCookie } from './cookie'
 export {
   httpStatusCodes,

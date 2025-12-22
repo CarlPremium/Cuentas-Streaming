@@ -19,7 +19,7 @@ const EntryTags = ({ className, meta, pathname, ...props }: EntryTagsProps) => {
   }
 
   return (
-    <div className={cn('flex w-full flex-wrap gap-1', className)} {...props}>
+    <div className={cn('flex w-full flex-wrap gap-2', className)} {...props}>
       {tags?.map((tag: Tag) => (
         <Link
           key={tag?.id}
@@ -29,8 +29,9 @@ const EntryTags = ({ className, meta, pathname, ...props }: EntryTagsProps) => {
               : '#'
           }
           className={cn(
-            buttonVariants({ variant: 'outline' }),
-            'h-auto px-2 py-1 text-xs'
+            'inline-flex items-center rounded-full bg-secondary px-3 py-1 text-xs font-medium',
+            'text-secondary-foreground transition-colors',
+            'hover:bg-primary hover:text-primary-foreground'
           )}
         >
           {tag?.text}

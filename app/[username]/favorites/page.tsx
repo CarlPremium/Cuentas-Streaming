@@ -46,7 +46,7 @@ export default async function FavoritesPage({
   searchParams,
 }: {
   params: { username: string }
-  searchParams?: { q?: string }
+  searchParams?: Promise<{ q?: string }>
 }) {
   const { user } = await getUserAPI(null, { username })
 
@@ -54,6 +54,7 @@ export default async function FavoritesPage({
 
   const { t } = await getTranslation()
   const pathname = await getPathname()
+  const resolvedSearchParams = searchParams ? await searchParams : {}
 
   return (
     <>
@@ -89,7 +90,7 @@ export default async function FavoritesPage({
                   path={pathname}
                   placeholder="find_favorites"
                   translate="yes"
-                  values={{ q: searchParams?.q ?? '' }}
+                  values={{ q: resolvedSearchParams?.q ?? '' }}
                 />
               </div>
               <PostList user={user} className="space-y-16 border-t" />

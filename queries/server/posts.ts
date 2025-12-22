@@ -52,7 +52,7 @@ export async function getAdjacentPostAPI(
   if (!id) return { previousPost, nextPost }
   if (!params?.userId) return { previousPost, nextPost }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: adjacent } = await supabase
     .rpc('get_adjacent_post_id', {
       postid: id,

@@ -81,8 +81,8 @@ import {
 
 import 'ckeditor5/ckeditor5.css'
 
-import Event from '@ckeditor/ckeditor5-utils/src/eventinfo'
-import { EditorConfig } from '@ckeditor/ckeditor5-core/src/editor/editorconfig'
+import type { EventInfo } from 'ckeditor5/src/index.js'
+import type { EditorConfig } from 'ckeditor5/src/index.js'
 import { SupabaseUploadAdapterPlugin } from './supabase-upload-adapter'
 import { useAppSelector } from '@/lib/redux/hooks'
 import en from 'ckeditor5/translations/en.js'
@@ -416,15 +416,15 @@ export default function Editor({ initialData }: EditorProps) {
     }
   }, [user?.id])
 
-  const onChange = (event: Event, editor: ClassicEditor) => {
+  const onChange = (event: EventInfo, editor: ClassicEditor) => {
     const data = editor.getData()
     setValue('content', data, { shouldDirty: true, shouldValidate: true })
   }
 
-  // const onReady = (event: Event, editor: ClassicEditor) => {}
-  // const onBlur = (event: Event, editor: ClassicEditor) => {}
-  // const onFocus = (event: Event, editor: ClassicEditor) => {}
-  // const onError = (event: Event, editor: ClassicEditor) => {}
+  // const onReady = (event: EventInfo, editor: ClassicEditor) => {}
+  // const onBlur = (event: EventInfo, editor: ClassicEditor) => {}
+  // const onFocus = (event: EventInfo, editor: ClassicEditor) => {}
+  // const onError = (event: EventInfo, editor: ClassicEditor) => {}
 
   return (
     <div

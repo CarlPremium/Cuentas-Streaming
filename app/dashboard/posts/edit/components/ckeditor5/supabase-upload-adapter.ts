@@ -1,9 +1,6 @@
 'use client'
 
-import {
-  FileLoader,
-  UploadResponse,
-} from '@ckeditor/ckeditor5-upload/src/filerepository'
+import type { FileLoader, UploadResponse } from 'ckeditor5/src/index.js'
 
 import { createClient } from '@/supabase/client'
 

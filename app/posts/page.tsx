@@ -23,7 +23,7 @@ export const revalidate = 0
 export default async function PostsPage({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string
     perPage?: string
     pageSize?: string
@@ -31,15 +31,16 @@ export default async function PostsPage({
     q?: string
     orderBy?: string
     order?: string
-  }
+  }>
 }) {
-  const page = +(searchParams?.page ?? '1')
-  const perPage = +(searchParams?.perPage ?? '10')
-  const pageSize = +(searchParams?.pageSize ?? '10')
-  const tag = searchParams?.tag
-  const q = searchParams?.q
-  const orderBy = searchParams?.orderBy ?? 'id'
-  const order = searchParams?.order ?? 'desc'
+  const params = await searchParams
+  const page = +(params?.page ?? '1')
+  const perPage = +(params?.perPage ?? '10')
+  const pageSize = +(params?.pageSize ?? '10')
+  const tag = params?.tag
+  const q = params?.q
+  const orderBy = params?.orderBy ?? 'id'
+  const order = params?.order ?? 'desc'
 
   const { posts, count } = await getPostsAPI(null, {
     page,
@@ -102,12 +103,15 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
-  const { title, description, date, author, meta } = post
+  const { title, description, date, author, meta, thumbnail_url } = post
   const username = author?.username
 
   return (
     <div className="space-y-2" {...props}>
-      <div className="h-40 bg-secondary"></div>
+      <PostThumbnail
+        href={post?.permalink ?? '#'}
+        backgroundImage={thumbnail_url ? `url(${thumbnail_url})` : undefined}
+      />
       <EntryTitle href={post?.permalink ?? '#'} text={title} />
       <EntrySummary text={description} />
       <EntryTags pathname="/posts" meta={meta} />
@@ -120,5 +124,29 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
         />
       </div>
     </div>
+  )
+}
+
+interface PostThumbnailProps extends React.HTMLAttributes<HTMLAnchorElement> {
+  href: string
+  backgroundImage?: string
+}
+
+const PostThumbnail = ({ href, backgroundImage, ...props }: PostThumbnailProps) => {
+  if (!backgroundImage) {
+    return (
+      <a href={href} {...props}>
+        <div className="h-40 bg-secondary"></div>
+      </a>
+    )
+  }
+
+  return (
+    <a href={href} {...props}>
+      <div
+        className="h-40 bg-cover bg-center bg-no-repeat transition-transform hover:scale-105"
+        style={{ backgroundImage }}
+      ></div>
+    </a>
   )
 }

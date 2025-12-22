@@ -10,5 +10,12 @@ export type LucideIconProps = LucideProps & {
 export function LucideIcon({ name, ...props }: LucideIconProps) {
   const Icon = icons[name]
 
+  if (!Icon) {
+    console.error(`LucideIcon: Icon "${name}" not found in lucide-react`)
+    // Return a fallback icon (Circle) or null
+    const FallbackIcon = icons['Circle']
+    return FallbackIcon ? <FallbackIcon {...props} /> : null
+  }
+
   return <Icon {...props} />
 }

@@ -35,20 +35,22 @@ const Navigation = () => {
   const defaultValue = pathname.split('/').slice(0, 3).join('/')
 
   return (
-    <Accordion type="multiple" defaultValue={[defaultValue]} className="py-2">
-      {dashboardConfig?.nav?.map((item: DashboardNavItem) => {
-        const denied =
-          Array.isArray(item?.roles) &&
-          user?.role &&
-          !item?.roles?.includes(user?.role)
-        return denied ? null : (
-          <React.Fragment key={item?.id}>
-            {item?.separator ? <Separator className="my-2" /> : null}
-            <NavItem item={item} />
-          </React.Fragment>
-        )
-      })}
-    </Accordion>
+    <nav className="space-y-1 p-3">
+      <Accordion type="multiple" defaultValue={[defaultValue]} className="space-y-1">
+        {dashboardConfig?.nav?.map((item: DashboardNavItem) => {
+          const denied =
+            Array.isArray(item?.roles) &&
+            user?.role &&
+            !item?.roles?.includes(user?.role)
+          return denied ? null : (
+            <React.Fragment key={item?.id}>
+              {item?.separator ? <Separator className="my-3" /> : null}
+              <NavItem item={item} />
+            </React.Fragment>
+          )
+        })}
+      </Accordion>
+    </nav>
   )
 }
 
@@ -63,26 +65,29 @@ const NavItem = ({ item }: { item: DashboardNavItem }) => {
           <TooltipTrigger asChild>
             <AccordionTrigger
               className={cn(
-                'px-4 py-1 hover:no-underline',
-                Array.isArray(item?.sub) ? '' : 'hover:cursor-default'
+                'px-0 py-0 hover:no-underline',
+                Array.isArray(item?.sub) ? '' : 'hover:cursor-default [&[data-state=open]>svg]:rotate-0'
               )}
             >
-              <NavLink
-                collapsed={collapsed}
-                href={item?.href}
-                translate={item?.translate}
-                iconName={item?.iconName}
-                iconClassName="mr-2"
-                disabled={item?.disabled}
-              >
-                {item?.text}
-              </NavLink>
-              {!collapsed && Array.isArray(item?.sub) ? (
-                <LucideIcon
-                  name="ChevronDown"
-                  className="size-4 min-w-4 shrink-0 transition-transform duration-200"
-                />
-              ) : null}
+              <div className="flex w-full items-center">
+                <NavLink
+                  collapsed={collapsed}
+                  href={item?.href}
+                  translate={item?.translate}
+                  iconName={item?.iconName}
+                  iconClassName=""
+                  disabled={item?.disabled}
+                  className="flex-1"
+                >
+                  {item?.text}
+                </NavLink>
+                {!collapsed && Array.isArray(item?.sub) ? (
+                  <LucideIcon
+                    name="ChevronDown"
+                    className="ml-2 size-4 min-w-4 shrink-0 text-muted-foreground transition-transform duration-200"
+                  />
+                ) : null}
+              </div>
             </AccordionTrigger>
           </TooltipTrigger>
           {collapsed && item?.text ? (
@@ -104,9 +109,9 @@ const NavSub = ({ item }: { item: DashboardNavItem }) => {
   return (
     <AccordionContent
       className={cn(
-        'pb-0',
+        'pb-1 pt-1',
         Array.isArray(item?.sub) && item?.sub?.length > 0
-          ? 'mb-2 ml-6 space-y-1 border-l px-4 pt-1'
+          ? 'ml-4 space-y-1 border-l-2 border-border pl-4'
           : ''
       )}
     >
@@ -117,14 +122,15 @@ const NavSub = ({ item }: { item: DashboardNavItem }) => {
           !sub?.roles?.includes(user?.role)
         return denied ? null : (
           <React.Fragment key={sub?.id}>
-            {sub?.separator ? <Separator className="my-1" /> : null}
+            {sub?.separator ? <Separator className="my-2" /> : null}
             <NavLink
               collapsed={collapsed}
               href={sub?.href}
               translate={sub?.translate}
               iconName={sub?.iconName}
-              iconClassName="mr-1 size-3.5 min-w-3.5"
+              iconClassName=""
               disabled={sub?.disabled}
+              className="text-xs"
             >
               {sub?.text}
             </NavLink>
@@ -162,17 +168,20 @@ const NavLink = ({
   const { t } = useTranslation()
   const pathname = usePathname()
   const parent = pathname.split('/').slice(0, 3).join('/')
+  const isActive = [pathname, parent].includes(href as string)
 
   return (
     <div className={cn(disabled ? 'cursor-not-allowed' : '')}>
       <Link
         href={href}
         className={cn(
-          'flex items-start break-all text-left text-sm',
-          disabled ? 'pointer-events-none opacity-50' : 'hover:underline',
-          [pathname, parent].includes(href as string)
-            ? ''
-            : 'text-muted-foreground',
+          'group flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all',
+          disabled 
+            ? 'pointer-events-none opacity-50' 
+            : 'hover:bg-accent hover:text-accent-foreground',
+          isActive
+            ? 'bg-accent text-accent-foreground shadow-sm'
+            : 'text-muted-foreground hover:text-foreground',
           className
         )}
         aria-disabled={disabled}
@@ -182,10 +191,13 @@ const NavLink = ({
         {iconName ? (
           <LucideIcon
             name={iconName}
-            className={cn(`mr-2 mt-[3px] size-4 min-w-4`, iconClassName)}
+            className={cn(
+              'size-4 min-w-4 transition-transform group-hover:scale-110',
+              iconClassName
+            )}
           />
         ) : null}
-        <span className={cn(collapsed ? 'hidden' : '')}>
+        <span className={cn(collapsed ? 'hidden' : '', 'truncate')}>
           {text && translate === 'yes' ? t(text, { ns }) : text}
           {children && typeof children === 'string' && translate === 'yes'
             ? t(children, { ns })

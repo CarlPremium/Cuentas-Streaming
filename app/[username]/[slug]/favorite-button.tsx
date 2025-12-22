@@ -75,12 +75,20 @@ const SignedInAction = ({ post, ...props }: FavoriteButtonProps) => {
   }
 
   return (
-    <button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
+    <button 
+      type="button" 
+      onClick={onClick} 
+      disabled={isSubmitting}
+      className="transition-transform hover:scale-110 active:scale-95"
+      {...props}
+    >
       <LucideIcon
         name="Heart"
         className={cn(
-          'size-5 min-w-5 text-destructive dark:text-white',
-          isLike ? 'fill-destructive dark:fill-white' : ''
+          'size-5 min-w-5 transition-colors',
+          isLike 
+            ? 'fill-red-500 text-red-500' 
+            : 'text-muted-foreground hover:text-red-500'
         )}
       />
     </button>
@@ -95,11 +103,12 @@ const SignedOutAction = ({ post, ...props }: FavoriteButtonProps) => {
     <button
       type="button"
       onClick={() => router.push(`/auth/signin?next=${pathname}`)}
+      className="transition-transform hover:scale-110 active:scale-95"
       {...props}
     >
       <LucideIcon
         name="Heart"
-        className="size-5 min-w-5 text-destructive dark:text-white"
+        className="size-5 min-w-5 text-muted-foreground transition-colors hover:text-red-500"
       />
     </button>
   )

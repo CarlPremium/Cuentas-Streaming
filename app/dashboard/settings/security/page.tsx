@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
 
-import { Title } from '@/components/title'
-import { Description } from '@/components/description'
-import { Separator } from '@/components/ui/separator'
+import { PageHeader } from '@/app/dashboard/components/page-header'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { ChangePasswordForm } from './change-password-form'
 import { Manage2FAForm } from './manage-2fa-form'
@@ -16,22 +15,37 @@ export default async function SecurityPage() {
   if (!user) redirect('/auth/signin')
 
   return (
-    <main className="flex-1 space-y-16 overflow-auto p-8 pb-36">
-      <div className="space-y-4">
-        <Title translate="yes">password</Title>
-        <Separator />
-        <Description translate="yes">
-          strengthen_your_account_by_keeping_your_password_strong
-        </Description>
-        <ChangePasswordForm user={user} />
-      </div>
-      <div className="space-y-4">
-        <Title translate="yes">two_factor_authentication</Title>
-        <Separator />
-        <Description translate="yes">
-          two_factor_authentication_is_a_method_of_adding_additional_security_to_your_account
-        </Description>
-        <Manage2FAForm user={user} />
+    <main className="flex-1 overflow-auto">
+      <div className="mx-auto max-w-5xl space-y-6 p-6 pb-36">
+        <PageHeader
+          icon="Shield"
+          title="security"
+          description="manage_your_password_and_security_settings"
+        />
+
+        <Card>
+          <CardHeader>
+            <CardTitle translate="yes">password</CardTitle>
+            <CardDescription translate="yes">
+              strengthen_your_account_by_keeping_your_password_strong
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChangePasswordForm user={user} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle translate="yes">two_factor_authentication</CardTitle>
+            <CardDescription translate="yes">
+              two_factor_authentication_is_a_method_of_adding_additional_security_to_your_account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Manage2FAForm user={user} />
+          </CardContent>
+        </Card>
       </div>
     </main>
   )

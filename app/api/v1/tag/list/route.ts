@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidates } from '@/lib/utils'
+import { ApiError } from '@/lib/utils'
+import { revalidates } from '@/lib/utils/cache'
 import { authorize } from '@/queries/server/auth'
 import { type Tag } from '@/types/database'
 
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
   if (perPage < 1) perPage = 1
   if (offset < 0) offset = 0
 
-  const supabase = createClient()
+  const supabase = await createClient()
 
   let columns: string = '*, meta:tagmeta(*), post_tags(*)'
   let match: Record<string, any> = {}

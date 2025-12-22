@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
+import { LucideIcon } from '@/lib/lucide-icon'
 
 import { LatestPosts, PostRanks } from '@/app/dashboard/dashboard'
 import { AppBar } from '@/app/dashboard/components/app-bar'
@@ -20,13 +21,26 @@ export default async function DashboardPage() {
     <div className="h-screen w-screen overflow-hidden">
       <AppBar className="sticky left-0 top-0 z-10" />
       <AppPanel>
-        <div className="flex flex-1 flex-col">
-          <main className="flex-1 space-y-16 overflow-auto p-8 pb-36">
-            <div className="space-y-4">
-              <Title translate="yes">dashboard</Title>
-              <Separator />
-              <Description translate="yes"></Description>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="flex flex-1 flex-col bg-muted/30">
+          <main className="flex-1 overflow-auto">
+            {/* Header Section */}
+            <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <div className="px-6 py-6 sm:px-8">
+                <div className="space-y-2">
+                  <Title translate="yes" className="text-3xl font-bold tracking-tight">
+                    dashboard
+                  </Title>
+                  <Description translate="yes" className="text-muted-foreground">
+                    Welcome back! Here's what's happening with your content.
+                  </Description>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Section */}
+            <div className="h-[calc(100vh-180px)] p-6 pb-8 sm:p-8">
+              {/* Main Content Grid - Full Height */}
+              <div className="grid h-full gap-6 lg:grid-cols-2">
                 <LatestPosts user={user} />
                 <PostRanks user={user} />
               </div>

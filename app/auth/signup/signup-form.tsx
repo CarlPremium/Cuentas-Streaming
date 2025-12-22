@@ -20,6 +20,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Mail, Lock, CheckCircle2 } from 'lucide-react'
+import { Progress } from '@/components/ui/progress'
 
 import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
@@ -27,7 +29,6 @@ import { useAuth } from '@/hooks/use-auth'
 const FormSchema = z
   .object({
     email: z.string().nonempty().max(255).email(),
-    // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
     newPassword: z.string().nonempty().min(6).max(72),
     confirmNewPassword: z.string().nonempty().min(6).max(72),
   })
@@ -38,17 +39,15 @@ const FormSchema = z
 
 type FormValues = z.infer<typeof FormSchema>
 
-const defaultValues: Partial<FormValues> = {
-  email: '',
-  newPassword: '',
-  confirmNewPassword: '',
-}
-
 const SignUpForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
-    mode: 'onSubmit',
-    defaultValues,
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    },
   })
 
   return (
@@ -73,14 +72,18 @@ const EmailField = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('email')}</FormLabel>
+          <FormLabel className="flex items-center gap-2">
+            <Mail className="h-4 w-4" />
+            {t('email')}
+          </FormLabel>
           <FormControl>
             <Input
               type="email"
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              placeholder="name@example.com"
+              placeholder="tu@ejemplo.com"
+              className="h-11"
               {...field}
             />
           </FormControl>
@@ -93,7 +96,32 @@ const EmailField = () => {
 
 const NewPasswordField = () => {
   const { t } = useTranslation()
-  const { control } = useFormContext()
+  const { control, watch } = useFormContext()
+  const password = watch('newPassword')
+
+  const getPasswordStrength = (pwd: string) => {
+    if (!pwd) return 0
+    let strength = 0
+    if (pwd.length >= 6) strength += 25
+    if (pwd.length >= 10) strength += 25
+    if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) strength += 25
+    if (/\d/.test(pwd)) strength += 15
+    if (/[^a-zA-Z\d]/.test(pwd)) strength += 10
+    return Math.min(strength, 100)
+  }
+
+  const strength = getPasswordStrength(password)
+  const getStrengthColor = () => {
+    if (strength < 40) return 'bg-red-500'
+    if (strength < 70) return 'bg-yellow-500'
+    return 'bg-green-500'
+  }
+
+  const getStrengthText = () => {
+    if (strength < 40) return 'Débil'
+    if (strength < 70) return 'Media'
+    return 'Fuerte'
+  }
 
   return (
     <FormField
@@ -101,17 +129,40 @@ const NewPasswordField = () => {
       name="newPassword"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('password')}</FormLabel>
+          <FormLabel className="flex items-center gap-2">
+            <Lock className="h-4 w-4" />
+            {t('password')}
+          </FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="new-password"
               autoCorrect="off"
-              placeholder={t('password')}
+              placeholder="••••••••"
+              className="h-11"
               {...field}
             />
           </FormControl>
+          {password && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Seguridad:</span>
+                <span className={`font-medium ${strength < 40 ? 'text-red-500' : strength < 70 ? 'text-yellow-500' : 'text-green-500'}`}>
+                  {getStrengthText()}
+                </span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+                <div
+                  className={`h-full transition-all duration-300 ${getStrengthColor()}`}
+                  style={{ width: `${strength}%` }}
+                />
+              </div>
+            </div>
+          )}
+          <FormDescription className="text-xs">
+            Mínimo 6 caracteres. Usa mayúsculas, números y símbolos para mayor seguridad.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -121,7 +172,11 @@ const NewPasswordField = () => {
 
 const ConfirmNewPasswordField = () => {
   const { t } = useTranslation()
-  const { control } = useFormContext()
+  const { control, watch } = useFormContext()
+  const password = watch('newPassword')
+  const confirmPassword = watch('confirmNewPassword')
+
+  const passwordsMatch = password && confirmPassword && password === confirmPassword
 
   return (
     <FormField
@@ -129,16 +184,25 @@ const ConfirmNewPasswordField = () => {
       name="confirmNewPassword"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('confirm_password')}</FormLabel>
+          <FormLabel className="flex items-center gap-2">
+            <Lock className="h-4 w-4" />
+            {t('confirm_password')}
+          </FormLabel>
           <FormControl>
-            <Input
-              type="password"
-              autoCapitalize="none"
-              autoComplete="new-password"
-              autoCorrect="off"
-              placeholder={t('confirm_password')}
-              {...field}
-            />
+            <div className="relative">
+              <Input
+                type="password"
+                autoCapitalize="none"
+                autoComplete="new-password"
+                autoCorrect="off"
+                placeholder="••••••••"
+                className="h-11"
+                {...field}
+              />
+              {passwordsMatch && (
+                <CheckCircle2 className="absolute right-3 top-3 h-5 w-5 text-green-500" />
+              )}
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -161,10 +225,13 @@ const SubmitButton = () => {
 
       const formValues = getValues()
 
-      const supabase = createClient()
+      const supabase = await createClient()
       const signed = await supabase.auth.signUp({
         email: formValues?.email,
         password: formValues?.newPassword,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       })
       if (signed?.error) throw new Error(signed?.error?.message)
 
@@ -175,6 +242,7 @@ const SubmitButton = () => {
       setUser(null)
 
       toast.success(t('you_have_successfully_registered_as_a_member'))
+      toast.info('Revisa tu correo para verificar tu cuenta')
 
       router.refresh()
       router.replace('/auth/signin')
@@ -197,9 +265,9 @@ const SubmitButton = () => {
       type="submit"
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
-      className="w-full"
+      className="w-full h-11 font-semibold"
     >
-      {t('signup')}
+      {isSubmitting ? 'Creando cuenta...' : t('signup')}
     </Button>
   )
 }

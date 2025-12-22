@@ -5,10 +5,10 @@ import {
   getMeta,
   getMetaValue,
   relativeUrl,
-  revalidates,
   compareMetaValue,
   setMeta,
 } from '@/lib/utils'
+import { revalidates } from '@/lib/utils/cache'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { type PostMeta, type PostTag, type TagMeta } from '@/types/database'
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   if (userId) match = { ...match, user_id: userId }
   if (slug) match = { ...match, slug }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: tag, error } = await supabase
     .from('tags')
     .select('*, meta:tagmeta(*), post_tags(*)')
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: old } = await supabase
     .from('tags')
     .select('*, meta:tagmeta(*), post_tags(*)')
@@ -170,7 +170,7 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: tag, error } = await supabase
     .from('tags')
     .insert(formData)
@@ -233,7 +233,7 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
 
   let revalidatePaths: string[] = []
 

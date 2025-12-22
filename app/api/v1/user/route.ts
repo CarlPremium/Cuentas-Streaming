@@ -3,9 +3,9 @@ import { createClient, createAdminClient } from '@/supabase/server'
 import {
   ApiError,
   getMetaValue,
-  revalidates,
   compareMetaValue,
 } from '@/lib/utils'
+import { revalidates } from '@/lib/utils/cache'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { type UserMeta } from '@/types/database'
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
   if (id) match = { ...match, id }
   if (username) match = { ...match, username }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: user, error } = await supabase
     .from('users')
     .select('*, meta:usermeta(*)')
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: old } = await supabase
     .from('users')
     .select('*, meta:usermeta(*)')
@@ -135,7 +135,7 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
   const { data: list } = await supabase.storage.from(bucketId).list(id)
 

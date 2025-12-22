@@ -3,9 +3,9 @@ import { createClient } from '@/supabase/server'
 import {
   ApiError,
   getMetaValue,
-  revalidates,
   compareMetaValue,
 } from '@/lib/utils'
+import { revalidates } from '@/lib/utils/cache'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { pricingPlans, type PricingPlan } from '@/config/site'
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   if (userId) match = { ...match, user_id: userId }
   if (slug) match = { ...match, slug }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: post, error } = await supabase
     .from('posts')
     .select('*, author:users(*), meta:postmeta(*)')
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: old } = await supabase
     .from('posts')
     .select('*, author:users(*), meta:postmeta(*)')
@@ -138,7 +138,7 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const plan = pricingPlans.find((r: PricingPlan) => r.name === user?.plan)
 
   if (!plan) {
@@ -247,7 +247,7 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.from('posts').delete().eq('id', id)
 
   if (error) {

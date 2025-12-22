@@ -113,7 +113,7 @@ Install Supabase packages.
 npm install @supabase/supabase-js @supabase/ssr
 ```
 
-Set environment variables. Edit `.env.local`:
+Set environment variables. Edit `.env`:
 
 ```txt
 NEXT_PUBLIC_SUPABASE_URL=<your_supabase_project_url>

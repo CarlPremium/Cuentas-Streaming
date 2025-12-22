@@ -1,19 +1,19 @@
 import { createClient } from '@/supabase/server'
 
 export async function getAuth() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
-    data: { session },
+    data: { user },
     error,
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getUser()
 
-  return error || !session
+  return error || !user
     ? { session: null, user: null }
-    : { session, user: session?.user }
+    : { session: { user }, user }
 }
 
 export async function authenticate() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user },
     error,
@@ -25,7 +25,7 @@ export async function authenticate() {
 }
 
 export async function authorize(id: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user },
     error,

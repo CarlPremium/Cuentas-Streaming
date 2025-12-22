@@ -10,18 +10,20 @@ import { CountryFlagButton } from '@/components/country-flag-button'
 
 import { ResetPasswordForm } from './reset-password-form'
 
-export default function ResetPasswordPage({
+export default async function ResetPasswordPage({
   searchParams,
 }: {
-  searchParams: {
+  searchParams: Promise<{
     token_hash: string
     type: string
     next: string
-  }
+  }>
 }) {
+  const params = await searchParams
+  
   if (
-    !/^pkce_/.test(searchParams?.token_hash) ||
-    searchParams?.type !== 'recovery'
+    !/^pkce_/.test(params?.token_hash) ||
+    params?.type !== 'recovery'
   ) {
     redirect('/auth/signin')
   }

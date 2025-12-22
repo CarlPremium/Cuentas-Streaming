@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidates } from '@/lib/utils'
+import { ApiError } from '@/lib/utils'
+import { revalidates } from '@/lib/utils/cache'
 import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const result = await supabase.rpc('count_posts', {
     userid: userId,
     posttype: postType,
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
   ]
 
   const data = defaultValues?.map((row) => {
-    return result?.data?.find((r) => r.status === row.status) ?? row
+    return result?.data?.find((r: any) => r.status === row.status) ?? row
   })
 
   const count = data?.reduce((acc, curr) => {

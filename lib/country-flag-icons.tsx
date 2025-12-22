@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Flags from 'country-flag-icons/react/3x2'
+import * as Flags from 'country-flag-icons/react/3x2'
 
 export interface FlagProps {
   code: string

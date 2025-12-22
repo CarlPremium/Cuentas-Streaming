@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient, createAdminClient } from '@/supabase/server'
-import { ApiError, revalidates } from '@/lib/utils'
+import { ApiError } from '@/lib/utils'
+import { revalidates } from '@/lib/utils/cache'
 import { authorize } from '@/queries/server/auth'
 
 export async function POST(request: NextRequest) {
@@ -52,7 +53,7 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: email, error } = await supabase
     .from('emails')
     .insert({ email: data?.email, user_id: userId })
@@ -85,7 +86,7 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: email, error } = await supabase
     .from('emails')
     .delete()

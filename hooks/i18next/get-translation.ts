@@ -12,7 +12,8 @@ export interface Translation {
 export async function getTranslation(
   ns: string = 'translation'
 ): Promise<Translation> {
-  const lng = cookies().get('app:language')?.value ?? defaultLng
+  const cookieStore = await cookies()
+  const lng = cookieStore.get('app:language')?.value ?? defaultLng
 
   const filePath = path.join(process.cwd(), `/public/locales/${lng}/${ns}.json`)
   const file = await fs.readFile(filePath, 'utf8')

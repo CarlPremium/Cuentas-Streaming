@@ -3,8 +3,8 @@ import { updateSession } from '@/supabase/middleware'
 import { Deny, denies } from '@/config/middleware'
 
 // Server Components only have read access to cookies.
-// This Middleware example can be used to refresh expired sessions before loading Server Component routes.
-export async function middleware(request: NextRequest) {
+// This Proxy example can be used to refresh expired sessions before loading Server Component routes.
+export async function proxy(request: NextRequest) {
   const { response, authenticated } = await updateSession(request)
 
   const found = denies?.find((deny: Deny) =>

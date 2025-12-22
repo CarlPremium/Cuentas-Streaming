@@ -151,5 +151,6 @@
     // Configure settings to be overridden for the sql language.
     "[sql]": {
         "editor.tabSize": 2
-    }
+    },
+    "typescript.autoClosingTags": false
 }

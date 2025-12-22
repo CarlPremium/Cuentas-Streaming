@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const truncate: boolean = true
 
   if (truncate) {

@@ -36,32 +36,37 @@ const PostRanks = ({ user, ...props }: PostRanksProps) => {
   }
 
   return (
-    <Card {...props}>
-      <CardHeader>
-        <CardTitle>{t('post_views_top_%d', { count: 10 })}</CardTitle>
-        {/* <CardDescription></CardDescription> */}
+    <Card className="flex h-full flex-col shadow-sm transition-shadow hover:shadow-md" {...props}>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <CardTitle className="text-lg font-semibold">{t('post_views_top_%d', { count: 10 })}</CardTitle>
+            <CardDescription className="text-sm">Most viewed posts</CardDescription>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent>
-        <table className="w-full text-sm">
-          <thead>
-            <tr>
-              <th className="w-[20px] text-left">#</th>
-              <th className="text-left">{t('post')}</th>
-              <th className="w-[60px] text-right">{t('views')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(posts) && posts?.length > 0 ? (
-              posts?.map((post: PostRank) => (
-                <ListItem key={post?.num} post={post} />
-              ))
-            ) : (
-              <EmptyItem />
-            )}
-          </tbody>
-        </table>
+      <CardContent className="flex-1 overflow-auto">
+        <div className="overflow-hidden rounded-lg border">
+          <table className="w-full text-sm">
+            <thead className="bg-muted/50">
+              <tr className="border-b">
+                <th className="w-[40px] px-3 py-2 text-left font-medium">#</th>
+                <th className="px-3 py-2 text-left font-medium">{t('post')}</th>
+                <th className="w-[80px] px-3 py-2 text-right font-medium">{t('views')}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {Array.isArray(posts) && posts?.length > 0 ? (
+                posts?.map((post: PostRank) => (
+                  <ListItem key={post?.num} post={post} />
+                ))
+              ) : (
+                <EmptyItem />
+              )}
+            </tbody>
+          </table>
+        </div>
       </CardContent>
-      {/* <CardFooter></CardFooter> */}
     </Card>
   )
 }
@@ -72,17 +77,23 @@ interface ListItemProps extends React.HTMLAttributes<HTMLTableRowElement> {
 
 const ListItem = ({ post, ...props }: ListItemProps) => {
   return (
-    <tr {...props}>
-      <td>{post?.num}</td>
-      <td>
+    <tr className="transition-colors hover:bg-muted/50" {...props}>
+      <td className="px-3 py-3">
+        <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+          {post?.num}
+        </span>
+      </td>
+      <td className="px-3 py-3">
         <Link
           href={post?.path ?? '#'}
-          className="line-clamp-1 font-serif hover:underline"
+          className="line-clamp-1 font-medium transition-colors hover:text-primary hover:underline"
         >
           {post?.title}
         </Link>
       </td>
-      <td className="text-right">{post?.views?.toLocaleString()}</td>
+      <td className="px-3 py-3 text-right font-mono text-xs font-medium text-muted-foreground">
+        {post?.views?.toLocaleString()}
+      </td>
     </tr>
   )
 }
@@ -92,7 +103,9 @@ const EmptyItem = () => {
 
   return (
     <tr>
-      <td colSpan={3}>{t('no_posts_yet')}</td>
+      <td colSpan={3} className="px-3 py-8 text-center">
+        <p className="text-sm text-muted-foreground">{t('no_posts_yet')}</p>
+      </td>
     </tr>
   )
 }

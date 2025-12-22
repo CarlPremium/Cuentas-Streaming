@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
   const now = new Date().toISOString()
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const updated = await supabase
     .from('emails')
     .update({ email_confirmed_at: now })

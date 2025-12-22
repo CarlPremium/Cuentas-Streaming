@@ -9,13 +9,16 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   const FALLBACK_IP_ADDRESS = '127.0.0.1'
   const xForwardedFor = request.headers.get('X-Forwarded-For')
+  const xRealIp = request.headers.get('x-real-ip')
 
-  let ip = request.ip
+  let ip: string | null = null
 
-  if (!ip && xForwardedFor) {
+  if (xForwardedFor) {
     ip = xForwardedFor.split(',')[0] ?? FALLBACK_IP_ADDRESS
-  } else if (!ip) {
-    ip = request.headers.get('x-real-ip') ?? FALLBACK_IP_ADDRESS
+  } else if (xRealIp) {
+    ip = xRealIp
+  } else {
+    ip = FALLBACK_IP_ADDRESS
   }
 
   return new Response(ip, { status: 200 })

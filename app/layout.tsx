@@ -39,12 +39,12 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children?: React.ReactNode
 }>) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const language = cookieStore.get('app:language')?.value || defaultLng
   const theme = cookieStore.get('app:theme')?.value || 'system'
 

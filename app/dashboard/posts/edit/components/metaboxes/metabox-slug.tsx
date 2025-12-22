@@ -24,6 +24,7 @@ const MetaboxSlug = () => {
     useFormContext()
 
   const fieldState = getFieldState('slug', formState)
+  const hasError = !!fieldState?.error
   const watchTitle: string = useWatch({ control, name: 'title' })
   const setSlug = React.useCallback(
     (value: string) => {
@@ -42,13 +43,23 @@ const MetaboxSlug = () => {
     return () => clearTimeout(timer)
   }, [post?.slug, setSlug, watchTitle])
 
+  React.useEffect(() => {
+    if (hasError) {
+      console.log('Slug field has error:', fieldState?.error)
+    }
+  }, [hasError, fieldState?.error])
+
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('slug')}</AccordionTrigger>
+        <AccordionTrigger className={hasError ? 'text-destructive' : ''}>
+          {t('slug')}
+          <span className="ml-1 text-destructive">*</span>
+        </AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <Input
             placeholder={t('please_enter_your_text')}
+            className={hasError ? 'border-destructive focus-visible:ring-destructive bg-destructive/5' : ''}
             onChangeCapture={debounce(
               (e: React.FormEvent<HTMLInputElement>) => {
                 setSlug((e.target as HTMLInputElement).value)

@@ -54,7 +54,7 @@ const MetaboxPublish = () => {
           </div>
           <ul className="space-y-1">
             <li className="flex items-center">
-              <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
+              <LucideIcon name="FileText" className="mr-2 size-4 min-w-4" />
               {`${t('status')}: `}
               {post?.status ? t(`${post?.status}`) : null}
             </li>
@@ -86,12 +86,14 @@ const MetaboxPublish = () => {
 const DraftButton = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, handleSubmit } = useFormContext()
+  const { getValues, handleSubmit, formState, trigger, setValue } = useFormContext()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: any) => {
+    console.log('DraftButton onSubmit called', { data })
+    
     try {
       setIsSubmitting(true)
 
@@ -102,6 +104,8 @@ const DraftButton = () => {
         ? relativeUrl(post?.permalink)
         : null
 
+      console.log('Saving draft:', { formValues, revalidatePaths })
+
       const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
@@ -110,16 +114,50 @@ const DraftButton = () => {
         }),
       })
 
+      console.log('Draft save result:', result)
+
       if (result?.error) throw new Error(result?.error?.message)
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
       toast.success(t('changed_successfully'))
     } catch (e: unknown) {
+      console.error('Draft save error:', e)
       toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const onError = (errors: any) => {
+    console.log('Draft validation errors:', errors)
+    toast.error('Errores de validación', {
+      description: 'Por favor corrige los errores en el formulario',
+    })
+  }
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('DraftButton clicked')
+    
+    // Check if user_id is missing and try to fix it
+    const currentValues = getValues()
+    if (!currentValues.user_id && post?.user_id) {
+      console.log('user_id missing, setting from post:', post.user_id)
+      setValue('user_id', post.user_id, { shouldValidate: true })
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
+    
+    // Trigger validation
+    const isValid = await trigger()
+    console.log('Draft validation result:', isValid, formState.errors)
+    
+    if (!isValid) {
+      onError(formState.errors)
+      return
+    }
+    
+    handleSubmit(onSubmit, onError)()
   }
 
   return (
@@ -127,7 +165,7 @@ const DraftButton = () => {
       type="button"
       variant="secondary"
       size="sm"
-      onClick={handleSubmit(onSubmit)}
+      onClick={handleClick}
       disabled={isSubmitting}
     >
       {t('save_draft')}
@@ -139,15 +177,21 @@ const ViewButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { handleSubmit } = useFormContext()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async () => {
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('ViewButton clicked')
+    
     try {
       setIsSubmitting(true)
-      if (post?.permalink) router.push(post?.permalink)
+      if (post?.permalink) {
+        console.log('Navigating to:', post?.permalink)
+        router.push(post?.permalink)
+      }
     } catch (e: unknown) {
+      console.error('View error:', e)
       toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
@@ -159,7 +203,7 @@ const ViewButton = () => {
       type="button"
       variant="secondary"
       size="sm"
-      onClick={handleSubmit(onSubmit)}
+      onClick={handleClick}
       disabled={isSubmitting}
     >
       {t('view')}
@@ -171,12 +215,14 @@ const PreviewButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, handleSubmit } = useFormContext()
+  const { getValues, handleSubmit, formState, trigger, setValue } = useFormContext()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: any) => {
+    console.log('PreviewButton onSubmit called', { data })
+    
     try {
       setIsSubmitting(true)
 
@@ -186,6 +232,8 @@ const PreviewButton = () => {
       const revalidatePaths = post?.permalink
         ? relativeUrl(post?.permalink)
         : null
+
+      console.log('Saving for preview:', { formValues, revalidatePaths })
 
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
@@ -200,13 +248,46 @@ const PreviewButton = () => {
       mutate(`/api/v1/post?id=${post?.id}`)
 
       if (post?.permalink) {
+        console.log('Navigating to preview:', `${post?.permalink}?preview=true`)
         router.push(`${post?.permalink}?preview=true`)
       }
     } catch (e: unknown) {
+      console.error('Preview error:', e)
       toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const onError = (errors: any) => {
+    console.log('Preview validation errors:', errors)
+    toast.error('Errores de validación', {
+      description: 'Por favor corrige los errores en el formulario',
+    })
+  }
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('PreviewButton clicked')
+    
+    // Check if user_id is missing and try to fix it
+    const currentValues = getValues()
+    if (!currentValues.user_id && post?.user_id) {
+      console.log('user_id missing, setting from post:', post.user_id)
+      setValue('user_id', post.user_id, { shouldValidate: true })
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
+    
+    // Trigger validation
+    const isValid = await trigger()
+    console.log('Preview validation result:', isValid, formState.errors)
+    
+    if (!isValid) {
+      onError(formState.errors)
+      return
+    }
+    
+    handleSubmit(onSubmit, onError)()
   }
 
   return (
@@ -214,7 +295,7 @@ const PreviewButton = () => {
       type="button"
       variant="secondary"
       size="sm"
-      onClick={handleSubmit(onSubmit)}
+      onClick={handleClick}
       disabled={isSubmitting}
     >
       {t('preview')}
@@ -226,11 +307,13 @@ const TrashButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { handleSubmit } = useFormContext()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async () => {
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('TrashButton clicked')
+    
     try {
       setIsSubmitting(true)
 
@@ -240,6 +323,8 @@ const TrashButton = () => {
       const revalidatePaths = post?.permalink
         ? relativeUrl(post?.permalink)
         : null
+
+      console.log('Moving to trash:', { post_id: post?.id, revalidatePaths })
 
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
@@ -253,8 +338,10 @@ const TrashButton = () => {
 
       toast.success(t('changed_successfully'))
 
+      console.log('Navigating to posts list')
       router.push('/dashboard/posts')
     } catch (e: unknown) {
+      console.error('Trash error:', e)
       toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
@@ -267,7 +354,7 @@ const TrashButton = () => {
       variant="link"
       className="h-auto p-0 text-destructive underline hover:no-underline dark:text-white"
       size="sm"
-      onClick={handleSubmit(onSubmit)}
+      onClick={handleClick}
       disabled={isSubmitting}
     >
       {t('move_to_trash')}
@@ -278,59 +365,187 @@ const TrashButton = () => {
 const PublishButton = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, handleSubmit } = useFormContext()
+  const { getValues, handleSubmit, formState, trigger, setValue } = useFormContext()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: any) => {
+    console.log('PublishButton onSubmit called', { data, errors: formState.errors })
+    
     try {
       setIsSubmitting(true)
 
-      if (!post) throw new Error('Require is not defined.')
+      if (!post) {
+        console.error('Post not found')
+        toast.error('Error', {
+          description: 'No se pudo encontrar la publicación',
+        })
+        return
+      }
 
       const formValues = getValues()
+      console.log('Form values:', formValues)
+      console.log('Form values types:', {
+        user_id: typeof formValues.user_id,
+        date: typeof formValues.date,
+        title: typeof formValues.title,
+        slug: typeof formValues.slug,
+        description: typeof formValues.description,
+        keywords: typeof formValues.keywords,
+        content: typeof formValues.content,
+        thumbnail_url: typeof formValues.thumbnail_url,
+        permalink: typeof formValues.permalink,
+        meta: Array.isArray(formValues.meta) ? 'array' : typeof formValues.meta,
+      })
+
       const visibility = getMetaValue(formValues?.meta, 'visibility')
       const future_date = getMetaValue(formValues?.meta, 'future_date')
 
       let status: string = visibility === 'private' ? 'private' : 'publish'
       if (future_date) status = 'future'
 
-      const data = { ...formValues, status }
+      const submitData = { ...formValues, status }
       const now = new Date().toISOString()
       const revalidatePaths = post?.permalink
         ? relativeUrl(post?.permalink)
         : null
 
-      const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+      console.log('Submitting to API:', { submitData, revalidatePaths })
+
+      // Show loading toast
+      const loadingToast = toast.loading('Guardando cambios...')
+
+      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: post?.date ? data : { ...data, date: now },
+          data: post?.date ? submitData : { ...submitData, date: now },
           options: { revalidatePaths },
         }),
       })
 
-      if (error) throw new Error(error?.message)
+      console.log('API response:', result)
 
+      // Dismiss loading toast
+      toast.dismiss(loadingToast)
+
+      if (result?.error) {
+        console.error('API error:', result.error)
+        toast.error('Error al guardar', {
+          description: result?.error?.message || 'No se pudo guardar la publicación',
+        })
+        return
+      }
+
+      // Success!
       mutate(`/api/v1/post?id=${post?.id}`)
-
-      toast.success(t('changed_successfully'))
+      
+      toast.success('¡Publicación guardada!', {
+        description: status === 'publish' 
+          ? 'Tu publicación ha sido publicada exitosamente' 
+          : status === 'future'
+          ? 'Tu publicación ha sido programada'
+          : 'Los cambios han sido guardados',
+      })
     } catch (e: unknown) {
-      toast.error((e as Error)?.message)
+      const error = e as Error
+      console.error('Unexpected error:', error)
+      console.error('Error stack:', error.stack)
+      toast.error('Error inesperado', {
+        description: error?.message || 'Ocurrió un error al guardar la publicación',
+      })
     } finally {
       setIsSubmitting(false)
     }
   }
 
+  const onError = (errors: any) => {
+    console.log('Validation errors:', errors)
+    
+    // Log each error in detail
+    Object.keys(errors).forEach(key => {
+      console.log(`Field "${key}" error:`, errors[key]?.message)
+    })
+    
+    // Create user-friendly error message
+    const errorFields = Object.keys(errors)
+    const userFriendlyErrors = errorFields
+      .filter(key => key !== 'user_id') // Don't show technical errors to user
+      .map(key => {
+        const fieldNames: Record<string, string> = {
+          title: 'Título',
+          slug: 'Slug',
+          permalink: 'Permalink',
+          description: 'Descripción',
+          keywords: 'Palabras clave',
+          content: 'Contenido',
+          thumbnail_url: 'URL de imagen',
+        }
+        return `${fieldNames[key] || key}: ${errors[key]?.message}`
+      })
+    
+    if (errors.user_id) {
+      // Technical error - log it but show generic message to user
+      console.error('CRITICAL: user_id is missing from form')
+      toast.error('Error técnico', {
+        description: 'Hay un problema con la sesión. Por favor recarga la página.',
+      })
+    } else if (userFriendlyErrors.length > 0) {
+      toast.error('Errores de validación', {
+        description: userFriendlyErrors.join(', '),
+      })
+    } else {
+      toast.error('Errores de validación', {
+        description: 'Por favor corrige los errores en el formulario antes de publicar',
+      })
+    }
+  }
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('PublishButton clicked')
+    
+    // Get current form values
+    const currentValues = getValues()
+    console.log('Current form values:', currentValues)
+    
+    // Check if user_id is missing and try to fix it
+    if (!currentValues.user_id && post?.user_id) {
+      console.log('user_id missing, setting from post:', post.user_id)
+      setValue('user_id', post.user_id, { shouldValidate: true })
+      // Wait a bit for the value to be set
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
+    
+    // Trigger validation for all fields
+    const isValid = await trigger()
+    console.log('Form validation result:', isValid)
+    console.log('Form errors:', formState.errors)
+    
+    if (!isValid) {
+      onError(formState.errors)
+      return
+    }
+    
+    handleSubmit(onSubmit, onError)()
+  }
+
   return (
     <Button
-      type="submit"
+      type="button"
       variant="default"
       size="sm"
-      onClick={handleSubmit(onSubmit)}
+      onClick={handleClick}
       disabled={isSubmitting}
     >
-      {post?.status === 'draft' ? t('publish') : t('update')}
+      {isSubmitting ? (
+        <>
+          <LucideIcon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
+          {t('saving')}...
+        </>
+      ) : (
+        post?.status === 'draft' ? t('publish') : t('update')
+      )}
     </Button>
   )
 }

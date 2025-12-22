@@ -25,12 +25,13 @@ import 'ckeditor5/ckeditor5.css'
 
 export async function generateMetadata(
   {
-    params: { username, slug },
+    params,
   }: {
-    params: { username: string; slug: string }
+    params: Promise<{ username: string; slug: string }>
   },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const { username, slug } = await params
   const { user } = await getUserAPI(null, { username })
   const { post } = await getPostAPI(null, {
     userId: user?.id,
@@ -53,12 +54,13 @@ export async function generateMetadata(
 }
 
 export default async function PostPage({
-  params: { username, slug },
+  params,
   searchParams,
 }: {
-  params: { username: string; slug: string }
-  searchParams?: { preview?: string }
+  params: Promise<{ username: string; slug: string }>
+  searchParams?: Promise<{ preview?: string }>
 }) {
+  const { username, slug } = await params
   const { user } = await getUserAPI(null, { username })
 
   if (!user) notFound()
@@ -70,9 +72,11 @@ export default async function PostPage({
 
   if (!post) notFound()
 
+  const resolvedSearchParams = searchParams ? await searchParams : {}
+
   if (
     ['future', 'private'].includes(post?.status) ||
-    searchParams?.preview === 'true'
+    resolvedSearchParams?.preview === 'true'
   ) {
     const { authenticated } = await authenticate()
     const { session } = await getAuth()
@@ -95,37 +99,49 @@ export default async function PostPage({
     <>
       <Header />
       <main className="min-h-[80vh] pb-20 sm:pb-40">
-        <div className="container min-w-0 flex-1 overflow-auto pt-16">
+        <article className="container mx-auto max-w-4xl px-4 pt-8 sm:pt-12 lg:pt-16">
+          {/* Title */}
           <PostTitle text={title} />
-          <div className="mb-8 flex justify-between">
-            <div className="space-x-1">
+          
+          {/* Meta Info */}
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b pb-6">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <EntryPublished dateTime={date ?? undefined} />
-              <span>— by</span>
+              <span className="hidden sm:inline">—</span>
+              <span className="hidden sm:inline">by</span>
               <EntryAuthor
                 href={
                   author?.username ? absoluteUrl(`/${author?.username}`) : '#'
                 }
-                className="underline hover:no-underline"
+                className="font-medium text-foreground underline decoration-muted-foreground underline-offset-2 transition-colors hover:text-primary hover:decoration-primary"
                 author={author}
               />
             </div>
-            <div className="flex space-x-4">
-              <PostViews post={post} />
+            <div className="flex items-center gap-4">
+              <PostViews post={post} className="text-muted-foreground" />
               <FavoriteButton post={post} />
             </div>
           </div>
+
+          {/* Cover Image */}
           <PostThumbnail
-            className="mb-8 sm:mx-0 md:mb-16"
+            className="mb-10 overflow-hidden rounded-xl shadow-lg sm:mb-12 lg:mb-16"
             backgroundImage={
               thumbnail_url ? `url(${thumbnail_url})` : undefined
             }
           />
-          <PostContent className="mb-8" __html={content} />
-          <div className="mb-16">
+
+          {/* Content */}
+          <PostContent className="mb-12" __html={content} />
+
+          {/* Tags */}
+          <div className="mb-16 border-t pt-8">
             <EntryTags pathname={`/${username}`} meta={meta} />
           </div>
+
+          {/* Related Posts */}
           <RelatedPosts previousPost={previousPost} nextPost={nextPost} t={t} />
-        </div>
+        </article>
       </main>
       <Footer />
     </>
@@ -140,8 +156,9 @@ const PostTitle = ({ className, text, ...props }: PostTitleProps) => {
   return (
     <h1
       className={cn(
-        'mb-8 break-all text-center font-serif text-6xl font-bold leading-none tracking-tighter',
-        'sm:mb-16 sm:leading-tight md:text-7xl md:leading-none lg:text-8xl',
+        'mb-6 font-serif text-4xl font-bold leading-tight tracking-tight text-foreground',
+        'sm:mb-8 sm:text-5xl sm:leading-tight',
+        'lg:text-6xl lg:leading-tight',
         className
       )}
       {...props}
@@ -155,13 +172,13 @@ interface PostThumbnailProps extends React.HTMLAttributes<HTMLDivElement> {
   backgroundImage?: string
 }
 
-const PostThumbnail = ({ backgroundImage, ...props }: PostThumbnailProps) => {
+const PostThumbnail = ({ backgroundImage, className, ...props }: PostThumbnailProps) => {
   if (!backgroundImage) return null
 
   return (
-    <div {...props}>
+    <div className={className} {...props}>
       <div
-        className="min-h-96 bg-cover bg-center bg-no-repeat sm:mx-0"
+        className="aspect-video w-full bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage }}
       ></div>
     </div>
@@ -181,7 +198,16 @@ const PostContent = ({ className, __html, ...props }: PostContentProps) => {
 
   return (
     <div
-      className={cn('ck-content', className)}
+      className={cn(
+        'ck-content prose prose-lg max-w-none',
+        'prose-headings:font-serif prose-headings:font-bold prose-headings:tracking-tight',
+        'prose-p:text-foreground prose-p:leading-relaxed',
+        'prose-a:text-primary prose-a:underline-offset-2 hover:prose-a:text-primary/80',
+        'prose-img:rounded-lg prose-img:shadow-md',
+        'prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5',
+        'prose-pre:rounded-lg prose-pre:border prose-pre:bg-muted',
+        className
+      )}
       dangerouslySetInnerHTML={{ __html }}
       {...props}
     ></div>

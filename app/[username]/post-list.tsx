@@ -75,19 +75,50 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
 
   return (
     <div
-      className="flex flex-row flex-wrap gap-4 border-b py-4 md:flex-col"
+      className="flex flex-row flex-wrap gap-4 border-b py-4 md:flex-nowrap"
       {...props}
     >
-      <EntryTitle href={post?.permalink ?? '#'} text={post?.title} />
-      <EntrySummary text={post?.description} />
-      <EntryTags
-        pathname={username ? `/${username}` : undefined}
-        meta={post?.meta}
+      <PostThumbnail
+        href={post?.permalink ?? '#'}
+        backgroundImage={post?.thumbnail_url ? `url(${post?.thumbnail_url})` : undefined}
+        className="w-full md:w-48 md:flex-shrink-0"
       />
-      <div className="w-full text-sm">
-        <EntryPublished dateTime={post?.date ?? undefined} />
+      <div className="flex-1 space-y-2">
+        <EntryTitle href={post?.permalink ?? '#'} text={post?.title} />
+        <EntrySummary text={post?.description} />
+        <EntryTags
+          pathname={username ? `/${username}` : undefined}
+          meta={post?.meta}
+        />
+        <div className="w-full text-sm">
+          <EntryPublished dateTime={post?.date ?? undefined} />
+        </div>
       </div>
     </div>
+  )
+}
+
+interface PostThumbnailProps extends React.HTMLAttributes<HTMLAnchorElement> {
+  href: string
+  backgroundImage?: string
+}
+
+const PostThumbnail = ({ href, backgroundImage, className, ...props }: PostThumbnailProps) => {
+  if (!backgroundImage) {
+    return (
+      <a href={href} className={className} {...props}>
+        <div className="h-32 bg-secondary md:h-full md:min-h-32"></div>
+      </a>
+    )
+  }
+
+  return (
+    <a href={href} className={className} {...props}>
+      <div
+        className="h-32 bg-cover bg-center bg-no-repeat transition-transform hover:scale-105 md:h-full md:min-h-32"
+        style={{ backgroundImage }}
+      ></div>
+    </a>
   )
 }
 

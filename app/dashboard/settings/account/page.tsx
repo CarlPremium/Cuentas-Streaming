@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
 
-import { Title } from '@/components/title'
-import { Description } from '@/components/description'
 import { Separator } from '@/components/ui/separator'
+import { PageHeader } from '@/app/dashboard/components/page-header'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { LucideIcon } from '@/lib/lucide-icon'
 
 import { ChangeUsernameForm } from './change-username-form'
 import { DeleteUserForm } from './delete-user-form'
@@ -16,24 +18,60 @@ export default async function AccountPage() {
   if (!user) redirect('/auth/signin')
 
   return (
-    <main className="flex-1 space-y-16 overflow-auto p-8 pb-36">
-      <div className="space-y-4">
-        <Title translate="yes">username</Title>
+    <main className="flex-1 overflow-auto">
+      <div className="space-y-6 p-6 pb-36 sm:p-8">
+        <PageHeader
+          title="Account Settings"
+          description="Manage your account preferences and security"
+          icon="UserCog"
+        />
         <Separator />
-        <Description translate="yes">
-          changing_your_username_may_have_unintended_side_effects
-        </Description>
-        <ChangeUsernameForm />
-      </div>
-      <div className="space-y-4">
-        <Title className="text-destructive dark:text-white" translate="yes">
-          delete_account
-        </Title>
-        <Separator />
-        <Description translate="yes">
-          if_you_delete_your_account_your_posts_and_other_related_information_will_be_permanently_deleted_and_cannot_be_recovered
-        </Description>
-        <DeleteUserForm user={user} />
+        
+        <div className="mx-auto max-w-4xl space-y-6">
+          {/* Username Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <LucideIcon name="AtSign" className="size-5" />
+                Username
+              </CardTitle>
+              <CardDescription>
+                Change your unique username. This will affect your profile URL.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Alert className="mb-4">
+                <LucideIcon name="AlertCircle" className="size-4" />
+                <AlertDescription>
+                  Changing your username may have unintended side effects, such as broken links.
+                </AlertDescription>
+              </Alert>
+              <ChangeUsernameForm />
+            </CardContent>
+          </Card>
+
+          {/* Danger Zone */}
+          <Card className="border-destructive/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-destructive">
+                <LucideIcon name="AlertTriangle" className="size-5" />
+                Danger Zone
+              </CardTitle>
+              <CardDescription>
+                Irreversible actions that will permanently affect your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Alert variant="destructive" className="mb-4">
+                <LucideIcon name="AlertTriangle" className="size-4" />
+                <AlertDescription>
+                  If you delete your account, all your posts and related information will be permanently deleted and cannot be recovered.
+                </AlertDescription>
+              </Alert>
+              <DeleteUserForm user={user} />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </main>
   )

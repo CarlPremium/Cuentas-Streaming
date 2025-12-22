@@ -1,9 +1,9 @@
 // It is recommended to read up on IETF Language Codes.
 // If you're using a language detector, do not define the lng option
 // https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
-export const defaultLng: string = 'en'
+export const defaultLng: string = 'es'
 
-export const fallbackLng: string = 'ko'
+export const fallbackLng: string = 'en'
 
 // If passing the ns option, the defaultNS will, by default, be set to the first ns passed.
 export const defaultNS: string | string[] = [
@@ -22,6 +22,7 @@ export interface Language {
 }
 
 export const languages: Language[] = [
+  { value: 'es', code: 'ES', name: 'Spanish', native: 'Español' },
   { value: 'en', code: 'US', name: 'English', native: 'English' },
   { value: 'ko', code: 'KR', name: 'Korean', native: '한국어' },
 ]
@@ -38,6 +39,16 @@ export interface Country {
 }
 
 export const countries: Country[] = [
+  {
+    value: 'ES',
+    name: 'Spain',
+    native: 'España',
+    phone: [34],
+    continent: 'EU',
+    capital: 'Madrid',
+    currency: ['EUR'],
+    languages: ['es'],
+  },
   {
     value: 'US',
     name: 'United States',

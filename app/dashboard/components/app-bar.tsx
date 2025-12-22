@@ -14,15 +14,15 @@ const AppBar = ({ children, className, ...props }: AppBarProps) => {
   return (
     <header
       className={cn(
-        'flex w-full items-center gap-4 border-b bg-background px-4',
-        'h-[60px]',
+        'flex w-full items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+        'h-[60px] px-6 shadow-sm',
         className
       )}
       {...props}
     >
       <SiteBrand />
       {children}
-      <div className="flex-1 text-destructive"></div>
+      <div className="flex-1"></div>
       <Notify />
       <AccountMenu />
     </header>

@@ -5,11 +5,9 @@ const withPWA = require('next-pwa')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'production',
-  swcMinify: true,
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
+  // Turbopack configuration
+  turbopack: {
+    root: process.cwd(),
   },
   images: {
     formats: ['image/avif', 'image/webp'],

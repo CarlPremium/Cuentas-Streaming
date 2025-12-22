@@ -23,7 +23,7 @@ export const revalidate = 0
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string
     perPage?: string
     pageSize?: string
@@ -31,15 +31,16 @@ export default async function SearchPage({
     q?: string
     orderBy?: string
     order?: string
-  }
+  }>
 }) {
-  const page = +(searchParams?.page ?? '1')
-  const perPage = +(searchParams?.perPage ?? '10')
-  const pageSize = +(searchParams?.pageSize ?? '10')
-  const tag = searchParams?.tag
-  const q = searchParams?.q
-  const orderBy = searchParams?.orderBy ?? 'id'
-  const order = searchParams?.order ?? 'desc'
+  const params = await searchParams
+  const page = +(params?.page ?? '1')
+  const perPage = +(params?.perPage ?? '10')
+  const pageSize = +(params?.pageSize ?? '10')
+  const tag = params?.tag
+  const q = params?.q
+  const orderBy = params?.orderBy ?? 'id'
+  const order = params?.order ?? 'desc'
 
   const { posts, count } = await getPostsAPI(null, {
     page,

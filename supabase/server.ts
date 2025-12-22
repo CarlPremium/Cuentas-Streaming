@@ -9,8 +9,8 @@ import { type Database } from '@/types/supabase'
  * @link https://supabase.com/docs/guides/auth/server-side/nextjs
  * @link https://supabase.com/docs/reference/javascript/auth-api
  */
-export function createClient() {
-  const cookieStore = cookies()
+export async function createClient() {
+  const cookieStore = await cookies()
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

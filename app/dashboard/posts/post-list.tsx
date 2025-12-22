@@ -252,7 +252,7 @@ const ListItem = ({ post }: { post: Post }) => {
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
         ) : (
           <LucideIcon
-            name="LockKeyholeOpen"
+            name="LockOpen"
             className="size-4 min-w-4 text-muted-foreground"
           />
         )}

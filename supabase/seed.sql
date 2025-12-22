@@ -35,20 +35,20 @@ grant all privileges on all tables in schema cron to postgres;
 --                                                            --
 ----------------------------------------------------------------
 
-delete from storage.objects where bucket_id = 'YOUR_BUCKET_ID';
-delete from storage.buckets where id = 'YOUR_BUCKET_ID';
+delete from storage.objects where bucket_id = 'media';
+delete from storage.buckets where id = 'media';
 
 drop policy if exists "Public access for all users" on storage.objects;
 drop policy if exists "User can upload in their own folders" on storage.objects;
 drop policy if exists "User can update their own objects" on storage.objects;
 drop policy if exists "User can delete their own objects" on storage.objects;
 
-insert into storage.buckets (id, name, public) values ('YOUR_BUCKET_ID', 'YOUR_BUCKET_ID', true);
+insert into storage.buckets (id, name, public) values ('media', 'media', true);
 
 create policy "Public access for all users" on storage.objects
-  for select to authenticated, anon using (bucket_id = 'YOUR_BUCKET_ID');
+  for select to authenticated, anon using (bucket_id = 'media');
 create policy "User can upload in their own folders" on storage.objects
-  for insert to authenticated with check (bucket_id = 'YOUR_BUCKET_ID' and (storage.foldername(name))[1] = (select auth.uid()::text));
+  for insert to authenticated with check (bucket_id = 'media' and (storage.foldername(name))[1] = (select auth.uid()::text));
 create policy "User can update their own objects" on storage.objects
   for update to authenticated using (owner_id = (select auth.uid()::text));
 create policy "User can delete their own objects" on storage.objects
@@ -71,88 +71,72 @@ select cron.schedule('daily-delete-old-cron-job-run-details', '0 0 * * *', 'SELE
 --                                                            --
 ----------------------------------------------------------------
 
+-- Drop tables first with CASCADE to automatically drop dependent objects
+drop table if exists statistics cascade;
+drop table if exists post_tags cascade;
+drop table if exists tagmeta cascade;
+drop table if exists tags cascade;
+drop table if exists votes cascade;
+drop table if exists favorites cascade;
+drop table if exists postmeta cascade;
+drop table if exists posts cascade;
+drop table if exists notifications cascade;
+drop table if exists emails cascade;
+drop table if exists role_permissions cascade;
+drop table if exists usermeta cascade;
+drop table if exists users cascade;
+
+-- Drop remaining functions that might not be caught by CASCADE
+drop function if exists generate_password cascade;
+drop function if exists generate_username cascade;
+drop function if exists handle_has_set_password cascade;
+drop function if exists verify_user_password cascade;
+drop function if exists handle_new_user cascade;
+drop function if exists create_new_user cascade;
+drop function if exists delete_user cascade;
+drop function if exists assign_user_data cascade;
+
+drop function if exists handle_username_changed_at cascade;
+drop function if exists handle_role_changed_at cascade;
+drop function if exists handle_plan_changed_at cascade;
+drop function if exists set_user_role cascade;
+drop function if exists set_user_plan cascade;
+drop function if exists set_user_meta cascade;
+drop function if exists get_users cascade;
+
+drop function if exists set_post_tags cascade;
+drop function if exists set_tag_meta cascade;
+drop function if exists unique_tag_slug cascade;
+drop function if exists generate_tag_slug cascade;
+drop function if exists set_tag cascade;
+
+drop function if exists set_statistics cascade;
+drop function if exists truncate_statistics cascade;
+drop function if exists get_post_rank_by_views cascade;
+drop function if exists get_vote cascade;
+drop function if exists set_favorite cascade;
+drop function if exists set_post_meta cascade;
+drop function if exists set_post_views cascade;
+drop function if exists unique_post_slug cascade;
+drop function if exists generate_post_slug cascade;
+drop function if exists count_posts cascade;
+drop function if exists get_adjacent_post_id cascade;
+drop function if exists create_new_posts cascade;
+drop function if exists handle_new_post cascade;
+drop function if exists truncate_posts cascade;
+
+drop function if exists title_description cascade;
+drop function if exists title_keywords cascade;
+drop function if exists title_content cascade;
+drop function if exists title_description_keywords cascade;
+drop function if exists title_description_content cascade;
+
+drop function if exists hourly_publish_future_posts cascade;
+drop function if exists daily_delete_old_cron_job_run_details cascade;
+
+-- Drop triggers on auth.users (these won't be dropped by CASCADE)
 drop trigger if exists on_created on auth.users;
 drop trigger if exists on_encrypted_password_updated on auth.users;
-drop trigger if exists on_updated_at on users;
-drop trigger if exists on_username_updated on users;
-drop trigger if exists on_role_updated on users;
-drop trigger if exists on_plan_updated on users;
-drop trigger if exists on_updated_at on role_permissions;
-drop trigger if exists on_updated_at on users;
-drop trigger if exists on_updated_at on emails;
-drop trigger if exists on_updated_at on notifications;
-drop trigger if exists on_updated_at on votes;
-drop trigger if exists on_updated_at on favorites;
-drop trigger if exists on_slug_upsert on posts;
-drop trigger if exists on_updated_at on posts;
-drop trigger if exists on_created on posts;
-drop trigger if exists on_updated_at on tags;
-drop trigger if exists on_slug_upsert on tags;
-
-----------------------------------------------------------------
-
-drop function if exists generate_password;
-drop function if exists generate_username;
-drop function if exists handle_has_set_password;
-drop function if exists verify_user_password;
-drop function if exists handle_new_user;
-drop function if exists create_new_user;
-drop function if exists delete_user;
-drop function if exists assign_user_data;
-
-drop function if exists handle_username_changed_at;
-drop function if exists handle_role_changed_at;
-drop function if exists handle_plan_changed_at;
-drop function if exists set_user_role;
-drop function if exists set_user_plan;
-drop function if exists set_user_meta;
-drop function if exists get_users;
-
-drop function if exists set_post_tags;
-drop function if exists set_tag_meta;
-drop function if exists unique_tag_slug;
-drop function if exists generate_tag_slug;
-drop function if exists set_tag;
-
-drop function if exists set_statistics;
-drop function if exists truncate_statistics;
-drop function if exists get_post_rank_by_views;
-drop function if exists get_vote;
-drop function if exists set_favorite;
-drop function if exists set_post_meta;
-drop function if exists set_post_views;
-drop function if exists unique_post_slug;
-drop function if exists generate_post_slug;
-drop function if exists count_posts;
-drop function if exists get_adjacent_post_id;
-drop function if exists create_new_posts;
-drop function if exists handle_new_post;
-drop function if exists truncate_posts;
-
-drop function if exists title_description;
-drop function if exists title_keywords;
-drop function if exists title_content;
-drop function if exists title_description_keywords;
-drop function if exists title_description_content;
-
-drop function if exists hourly_publish_future_posts;
-drop function if exists daily_delete_old_cron_job_run_details;
-
-----------------------------------------------------------------
-
-drop table if exists statistics;
-drop table if exists post_tags;
-drop table if exists tagmeta;
-drop table if exists tags;
-drop table if exists votes;
-drop table if exists favorites;
-drop table if exists postmeta;
-drop table if exists posts;
-drop table if exists notifications;
-drop table if exists emails;
-drop table if exists role_permissions;
-drop table if exists usermeta;
-drop table if exists users;
 
 ----------------------------------------------------------------
 --                                                            --
@@ -1391,10 +1375,10 @@ $$ language plpgsql;
 --                                                            --
 ----------------------------------------------------------------
 
--- select create_new_user('username@example.com', '123456789');
--- select delete_user('username@example.com');
+-- select create_new_user('premiumacarl@gmail.com', '123456789');
+-- select delete_user('premiumacarl@gmail.com');
 
 select assign_user_data();
 
-select set_user_role('superadmin', null, 'username@example.com');
-select set_user_plan('premium', null, 'username@example.com');
+select set_user_role('superadmin', null, 'premiumacarl@gmail.com');
+select set_user_plan('premium', null, 'premiumacarl@gmail.com');
