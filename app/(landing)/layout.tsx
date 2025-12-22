@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './landing.css'
 
 export default function LandingLayout({
   children,
@@ -6,7 +7,7 @@ export default function LandingLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="dark min-h-screen">
+    <div className="landing-page dark min-h-screen">
       {children}
     </div>
   )

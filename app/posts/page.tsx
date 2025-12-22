@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Search, Filter, Calendar, User, Tag as TagIcon, TrendingUp } from 'lucide-react'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -11,7 +12,7 @@ import {
   EntryTags,
 } from '@/components/hentry'
 
-import { absoluteUrl } from '@/lib/utils'
+import { absoluteUrl, cn } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
 import { getPostsAPI } from '@/queries/server/posts'
 import { type Post } from '@/types/database'
@@ -59,20 +60,41 @@ export default async function PostsPage({
   return (
     <>
       <Header />
-      <main className="min-h-[80vh] pb-20 sm:pb-40">
-        <div className="container flex-1 overflow-auto">
-          <h2 className="mt-16 text-center font-serif text-4xl font-bold">
-            {tag ? `${t('tags')} : ${tag}` : t('posts')}
-          </h2>
+      <main className="min-h-screen">
+        {/* Compact Header */}
+        <div className="border-b bg-muted/30">
+          <div className="container py-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <TagIcon className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold">
+                    {tag ? `#${tag}` : t('posts')}
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    {total} {total === 1 ? t('post') : t('posts')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="container py-8">
           <PagingProvider value={{ total, page, perPage, pageSize }}>
-            <div className="mt-12 space-y-16">
+            <div className="space-y-8">
               {Array.isArray(posts) && posts?.length > 0 ? (
                 <>
                   <PostList posts={posts} />
-                  <Paging />
+                  <div className="flex justify-center">
+                    <Paging />
+                  </div>
                 </>
               ) : (
-                <div className="text-center">{t('no_posts_yet')}</div>
+                <EmptyState tag={tag} t={t} />
               )}
             </div>
           </PagingProvider>
@@ -90,7 +112,7 @@ interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
 const PostList = ({ posts, ...props }: PostListProps) => {
   return (
     <div
-      className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
+      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       {...props}
     >
       {posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)}
@@ -107,23 +129,61 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
   const username = author?.username
 
   return (
-    <div className="space-y-2" {...props}>
+    <article 
+      className={cn(
+        "group relative flex h-full flex-col overflow-hidden rounded-lg border bg-card",
+        "shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/5",
+        "hover:-translate-y-0.5"
+      )}
+      {...props}
+    >
+      {/* Thumbnail */}
       <PostThumbnail
         href={post?.permalink ?? '#'}
         backgroundImage={thumbnail_url ? `url(${thumbnail_url})` : undefined}
       />
-      <EntryTitle href={post?.permalink ?? '#'} text={title} />
-      <EntrySummary text={description} />
-      <EntryTags pathname="/posts" meta={meta} />
-      <div className="w-full text-sm">
-        <EntryPublished dateTime={date ?? undefined} />
-        <span> — by </span>
-        <EntryAuthor
-          href={username ? absoluteUrl(`/${username}`) : '#'}
-          author={author}
+      
+      {/* Content */}
+      <div className="flex flex-1 flex-col gap-2.5 p-4">
+        {/* Tags */}
+        <EntryTags pathname="/posts" meta={meta} />
+        
+        {/* Title */}
+        <div className="flex-1">
+          <EntryTitle 
+            href={post?.permalink ?? '#'} 
+            text={title}
+            className="text-lg font-bold leading-snug transition-colors group-hover:text-primary"
+          />
+        </div>
+        
+        {/* Description */}
+        <EntrySummary 
+          text={description} 
+          className="text-xs text-muted-foreground"
         />
+        
+        {/* Footer */}
+        <div className="flex items-center gap-2 border-t pt-2.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Calendar className="h-3 w-3" />
+            <EntryPublished dateTime={date ?? undefined} />
+          </div>
+          <span className="text-muted-foreground/50">•</span>
+          <div className="flex items-center gap-1 truncate">
+            <User className="h-3 w-3 flex-shrink-0" />
+            <EntryAuthor
+              href={username ? absoluteUrl(`/${username}`) : '#'}
+              author={author}
+              className="truncate hover:text-primary hover:underline"
+            />
+          </div>
+        </div>
       </div>
-    </div>
+      
+      {/* Hover Effect Overlay */}
+      <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-primary opacity-0 transition-opacity group-hover:opacity-100" />
+    </article>
   )
 }
 
@@ -135,18 +195,58 @@ interface PostThumbnailProps extends React.HTMLAttributes<HTMLAnchorElement> {
 const PostThumbnail = ({ href, backgroundImage, ...props }: PostThumbnailProps) => {
   if (!backgroundImage) {
     return (
-      <a href={href} {...props}>
-        <div className="h-40 bg-secondary"></div>
+      <a href={href} className="relative block" {...props}>
+        <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/10 via-accent/10 to-secondary">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <TagIcon className="h-10 w-10 text-muted-foreground/20" />
+          </div>
+        </div>
       </a>
     )
   }
 
   return (
-    <a href={href} {...props}>
+    <a href={href} className="relative block overflow-hidden" {...props}>
       <div
-        className="h-40 bg-cover bg-center bg-no-repeat transition-transform hover:scale-105"
+        className={cn(
+          "relative aspect-[16/9] bg-cover bg-center bg-no-repeat",
+          "transition-all duration-500 group-hover:scale-105"
+        )}
         style={{ backgroundImage }}
-      ></div>
+      >
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      </div>
     </a>
+  )
+}
+
+// Empty State Component
+interface EmptyStateProps {
+  tag?: string
+  t: (key: string) => string
+}
+
+const EmptyState = ({ tag, t }: EmptyStateProps) => {
+  return (
+    <div className="flex min-h-[300px] flex-col items-center justify-center rounded-lg border-2 border-dashed bg-muted/20 p-8 text-center">
+      <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+        <Search className="h-8 w-8 text-muted-foreground" />
+      </div>
+      <h3 className="mb-2 text-xl font-bold">{t('no_posts_found')}</h3>
+      <p className="mb-4 max-w-md text-sm text-muted-foreground">
+        {tag 
+          ? t('no_posts_with_this_tag')
+          : t('no_posts_available_yet')}
+      </p>
+      {tag && (
+        <a
+          href="/posts"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          {t('view_all_posts')}
+        </a>
+      )}
+    </div>
   )
 }

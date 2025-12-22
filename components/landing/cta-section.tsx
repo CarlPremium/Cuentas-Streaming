@@ -32,22 +32,22 @@ export function CTASection() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-10">
-            <Button className="btn-primary group text-base px-8 py-6">
-              <Send className="w-5 h-5 mr-2" />
-              Unirse al Canal Telegram
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            <Button className="btn-primary group text-base px-8 py-6 text-background font-semibold">
+              <Send className="w-5 h-5 mr-2 text-background" />
+              <span className="text-background">Unirse al Canal Telegram</span>
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform text-background" />
             </Button>
-            <Button variant="outline" className="btn-secondary text-base px-8 py-6">
-              <Sparkles className="w-5 h-5 mr-2" />
-              Acceso Premium
+            <Button variant="outline" className="btn-secondary text-base px-8 py-6 text-foreground font-semibold">
+              <Sparkles className="w-5 h-5 mr-2 text-foreground" />
+              <span className="text-foreground">Acceso Premium</span>
             </Button>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
             {features.map((feature) => (
               <div key={feature.label} className="flex flex-col items-center p-4 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/30 to-neon-cyan/20 flex items-center justify-center mb-3">
-                  <feature.icon className="w-6 h-6 text-neon-cyan" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-cyan to-neon-green flex items-center justify-center mb-3 shadow-lg">
+                  <feature.icon className="w-6 h-6 text-white" />
                 </div>
                 <span className="font-heading font-semibold text-foreground text-sm">{feature.label}</span>
                 <span className="text-xs text-muted-foreground">{feature.sublabel}</span>

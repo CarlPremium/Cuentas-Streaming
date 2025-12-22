@@ -49,8 +49,8 @@ export function StatsSection() {
               className="stat-card group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                <stat.icon className="w-7 h-7 text-background" />
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                <stat.icon className="w-7 h-7 text-white" />
               </div>
 
               <div className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-1">

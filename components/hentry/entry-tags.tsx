@@ -19,8 +19,8 @@ const EntryTags = ({ className, meta, pathname, ...props }: EntryTagsProps) => {
   }
 
   return (
-    <div className={cn('flex w-full flex-wrap gap-2', className)} {...props}>
-      {tags?.map((tag: Tag) => (
+    <div className={cn('flex w-full flex-wrap gap-1.5', className)} {...props}>
+      {tags?.slice(0, 3).map((tag: Tag) => (
         <Link
           key={tag?.id}
           href={
@@ -29,14 +29,19 @@ const EntryTags = ({ className, meta, pathname, ...props }: EntryTagsProps) => {
               : '#'
           }
           className={cn(
-            'inline-flex items-center rounded-full bg-secondary px-3 py-1 text-xs font-medium',
-            'text-secondary-foreground transition-colors',
-            'hover:bg-primary hover:text-primary-foreground'
+            'inline-flex items-center rounded-md bg-primary/10 px-2.5 py-1 text-xs font-medium',
+            'text-primary transition-all duration-200',
+            'hover:bg-primary hover:text-primary-foreground hover:shadow-sm'
           )}
         >
           {tag?.text}
         </Link>
       ))}
+      {tags?.length > 3 && (
+        <span className="inline-flex items-center rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
+          +{tags.length - 3}
+        </span>
+      )}
     </div>
   )
 }

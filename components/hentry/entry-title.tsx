@@ -11,8 +11,8 @@ const EntryTitle = ({ className, href, text, ...props }: EntryTitleProps) => {
   return (
     <h3
       className={cn(
-        'line-clamp-2 w-full font-serif text-3xl',
-        href ? 'hover:underline' : '',
+        'line-clamp-2 w-full font-serif text-lg font-bold leading-snug',
+        href ? 'transition-colors hover:text-primary' : '',
         className
       )}
       {...props}

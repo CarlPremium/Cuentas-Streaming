@@ -62,7 +62,7 @@ export function HowItWorksSection() {
                 </div>
 
                 <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mx-auto mb-5 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg`}>
-                  <item.icon className="w-8 h-8 sm:w-10 sm:h-10 text-background" />
+                  <item.icon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
 
                 <h3 className="font-heading text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3">

@@ -1,0 +1,188 @@
+/* Landing Page Specific Styles - Only applies to / route */
+
+/* Force light/bright colors for landing page icons and text */
+.landing-page {
+  /* Ensure all text is visible */
+  color: hsl(210 40% 98%);
+}
+
+.landing-page .text-background {
+  color: hsl(222 47% 6%) !important;
+}
+
+.landing-page .text-foreground {
+  color: hsl(210 40% 98%) !important;
+}
+
+.landing-page .text-muted-foreground {
+  color: hsl(215 20% 70%) !important;
+}
+
+/* Fix icon visibility */
+.landing-page svg,
+.landing-page .lucide {
+  color: currentColor;
+}
+
+/* Ensure icons in buttons are visible */
+.landing-page .btn-primary svg,
+.landing-page .btn-primary .lucide {
+  color: hsl(222 47% 6%) !important;
+}
+
+.landing-page .btn-secondary svg,
+.landing-page .btn-secondary .lucide {
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Badge icons should be visible */
+.landing-page .badge-live svg,
+.landing-page .badge-live .lucide {
+  color: hsl(222 47% 6%) !important;
+}
+
+.landing-page .badge-stats svg,
+.landing-page .badge-stats .lucide {
+  color: hsl(180 100% 50%) !important;
+}
+
+/* Platform pill icons */
+.landing-page .platform-pill {
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Feature icons should be bright */
+.landing-page .feature-icon svg,
+.landing-page .feature-icon .lucide {
+  color: hsl(222 47% 6%) !important;
+}
+
+/* Stat card icons */
+.landing-page .stat-card svg,
+.landing-page .stat-card .lucide {
+  color: hsl(222 47% 6%) !important;
+}
+
+/* Step icons in how it works */
+.landing-page .glass-card-hover svg,
+.landing-page .glass-card-hover .lucide {
+  color: inherit;
+}
+
+/* Ensure gradient backgrounds have proper text color */
+.landing-page [class*="bg-gradient"] svg,
+.landing-page [class*="bg-gradient"] .lucide {
+  color: hsl(222 47% 6%) !important;
+}
+
+/* CTA section icons */
+.landing-page .glass-card svg,
+.landing-page .glass-card .lucide {
+  color: hsl(180 100% 50%);
+}
+
+/* Neon colored icons */
+.landing-page .text-neon-cyan {
+  color: hsl(180 100% 50%) !important;
+}
+
+.landing-page .text-neon-pink {
+  color: hsl(330 100% 65%) !important;
+}
+
+.landing-page .text-neon-purple {
+  color: hsl(280 85% 65%) !important;
+}
+
+.landing-page .text-neon-green {
+  color: hsl(150 100% 50%) !important;
+}
+
+.landing-page .text-neon-blue {
+  color: hsl(220 100% 60%) !important;
+}
+
+/* Ensure headings are bright */
+.landing-page h1,
+.landing-page h2,
+.landing-page h3,
+.landing-page h4,
+.landing-page h5,
+.landing-page h6 {
+  color: hsl(210 40% 98%);
+}
+
+/* Fix testimonial avatars */
+.landing-page .text-white {
+  color: hsl(0 0% 100%) !important;
+}
+
+/* Ensure FAQ accordion text is visible */
+.landing-page .glass-card .text-foreground {
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Fix step numbers */
+.landing-page .text-xs.font-bold {
+  color: hsl(215 20% 70%);
+}
+
+/* Ensure all interactive elements are visible */
+.landing-page button {
+  color: inherit;
+}
+
+.landing-page button svg,
+.landing-page button .lucide {
+  color: currentColor;
+}
+
+/* Fix specific button text colors */
+.landing-page .btn-primary {
+  color: hsl(222 47% 6%) !important;
+}
+
+.landing-page .btn-secondary {
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Ensure card titles are bright */
+.landing-page .font-heading {
+  color: hsl(210 40% 98%);
+}
+
+/* Fix any remaining dark text */
+.landing-page .text-sm,
+.landing-page .text-base,
+.landing-page .text-lg,
+.landing-page .text-xl {
+  color: inherit;
+}
+
+/* Ensure proper contrast for all text */
+.landing-page p {
+  color: hsl(215 20% 70%);
+}
+
+.landing-page .font-semibold,
+.landing-page .font-bold {
+  color: hsl(210 40% 98%);
+}
+
+/* Fix icon containers with gradients */
+.landing-page [class*="rounded-"] > svg,
+.landing-page [class*="rounded-"] > .lucide {
+  color: currentColor;
+}
+
+/* Ensure all icons in colored backgrounds are visible */
+.landing-page [class*="bg-gradient-to"] svg,
+.landing-page [class*="bg-gradient-to"] .lucide {
+  color: hsl(222 47% 6%) !important;
+}
+
+/* Fix any remaining visibility issues */
+.landing-page * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

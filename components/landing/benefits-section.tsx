@@ -65,8 +65,8 @@ export function BenefitsSection() {
               className="glass-card-hover p-6 sm:p-8 group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className={`feature-icon ${benefit.iconBg} text-background mb-5 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                <benefit.icon className="w-7 h-7" />
+              <div className={`w-16 h-16 rounded-2xl ${benefit.iconBg} flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
+                <benefit.icon className="w-7 h-7 text-white" />
               </div>
 
               <h3 className="font-heading text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3">

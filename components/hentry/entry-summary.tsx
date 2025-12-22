@@ -7,7 +7,7 @@ interface EntrySummaryProps extends React.HTMLAttributes<HTMLParagraphElement> {
 
 const EntrySummary = ({ className, text, ...props }: EntrySummaryProps) => {
   return (
-    <p className={cn('line-clamp-3 w-full', className)} {...props}>
+    <p className={cn('line-clamp-2 w-full text-xs leading-relaxed', className)} {...props}>
       {text}
     </p>
   )
