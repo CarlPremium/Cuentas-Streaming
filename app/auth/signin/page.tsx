@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
 import { SiteLogo } from '@/components/site-logo'
@@ -73,23 +74,23 @@ export default function SignInPage() {
               </TextLink>
             </div>
 
-            {/* Terms footer */}
-            <div className="text-center text-xs text-muted-foreground">
-              <TextLink
-                href="/policy/terms"
-                className="underline-offset-4 hover:underline"
-                translate="yes"
-              >
-                terms_of_service
-              </TextLink>
-              {' · '}
-              <TextLink
-                href="/policy/privacy"
-                className="underline-offset-4 hover:underline"
-                translate="yes"
-              >
-                privacy_policy
-              </TextLink>
+            {/* Legal compliance footer */}
+            <div className="space-y-2 pt-2">
+              <p className="text-center text-xs text-muted-foreground">
+                Al iniciar sesión, aceptas nuestros{' '}
+                <Link href="/policy/terms" className="text-primary underline hover:no-underline">
+                  Términos y Condiciones
+                </Link>
+                {', '}
+                <Link href="/policy/privacy" className="text-primary underline hover:no-underline">
+                  Política de Privacidad
+                </Link>
+                {' y '}
+                <Link href="/terms" className="text-primary underline hover:no-underline">
+                  Política de Cookies
+                </Link>
+                .
+              </p>
             </div>
           </CardContent>
         </Card>

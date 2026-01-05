@@ -47,6 +47,7 @@ export function ParticleField() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Initialize particles
     const particleCount = Math.min(80, Math.floor(dimensions.width / 15))
     particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * dimensions.width,
@@ -55,36 +56,41 @@ export function ParticleField() {
       speedX: (Math.random() - 0.5) * 0.5,
       speedY: (Math.random() - 0.5) * 0.5,
       opacity: Math.random() * 0.5 + 0.2,
-      hue: Math.random() > 0.5 ? 280 : 180,
+      hue: Math.random() > 0.5 ? 280 : 180, // Purple or Cyan
     }))
 
     const animate = () => {
       ctx.clearRect(0, 0, dimensions.width, dimensions.height)
 
       particlesRef.current.forEach((particle, i) => {
+        // Mouse interaction
         const dx = mouseRef.current.x - particle.x
         const dy = mouseRef.current.y - particle.y
         const distance = Math.sqrt(dx * dx + dy * dy)
-        
+
         if (distance < 150) {
           const force = (150 - distance) / 150
           particle.x -= dx * force * 0.02
           particle.y -= dy * force * 0.02
         }
 
+        // Update position
         particle.x += particle.speedX
         particle.y += particle.speedY
 
+        // Wrap around edges
         if (particle.x < 0) particle.x = dimensions.width
         if (particle.x > dimensions.width) particle.x = 0
         if (particle.y < 0) particle.y = dimensions.height
         if (particle.y > dimensions.height) particle.y = 0
 
+        // Draw particle
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fillStyle = `hsla(${particle.hue}, 85%, 65%, ${particle.opacity})`
         ctx.fill()
 
+        // Draw connections
         particlesRef.current.slice(i + 1).forEach((other) => {
           const dx = particle.x - other.x
           const dy = particle.y - other.y

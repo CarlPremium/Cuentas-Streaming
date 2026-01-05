@@ -124,9 +124,32 @@ export const dashboardConfig: DashboardConfig = {
       href: '/dashboard/admin',
       text: 'admin',
       translate: 'yes',
-      iconName: 'FolderLock',
+      iconName: 'ShieldCheck',
       separator: true,
       roles: ['admin', 'superadmin'],
+      sub: [
+        {
+          id: 1,
+          href: '/dashboard/admin/giveaways',
+          text: 'giveaways',
+          translate: 'yes',
+          iconName: 'Gift',
+        },
+        {
+          id: 2,
+          href: '/dashboard/admin/store',
+          text: 'store',
+          translate: 'yes',
+          iconName: 'Store',
+        },
+        {
+          id: 3,
+          href: '/dashboard/admin/system',
+          text: 'system_settings',
+          translate: 'yes',
+          iconName: 'Settings',
+        },
+      ],
     },
   ],
 }

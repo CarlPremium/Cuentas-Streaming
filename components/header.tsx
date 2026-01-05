@@ -67,22 +67,6 @@ const Header = ({ className, ...props }: HeaderProps) => {
           <SiteBrand className="mr-6 hidden md:flex" />
           <Navigation />
           <div className="ml-auto flex items-center gap-3">
-            {pathname !== '/' ? (
-              <SearchForm
-                path="/search"
-                placeholder="search_text"
-                translate="yes"
-                values={{
-                  q: pathname?.startsWith('/search')
-                    ? ((searchParams.get('q') as string) ?? '')
-                    : '',
-                }}
-                className="hidden sm:flex"
-              />
-            ) : null}
-            {pathname !== '/' ? (
-              <SearchFormDialog className="sm:hidden" />
-            ) : null}
             {user ? <SignedInNav /> : <SignedOutNav />}
           </div>
         </div>

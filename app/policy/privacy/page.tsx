@@ -1,7 +1,16 @@
 import * as React from 'react'
+import type { Metadata } from 'next'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { generateSEOMetadata } from '@/lib/seo/metadata'
+
+export const metadata: Metadata = generateSEOMetadata({
+  title: 'Política de Privacidad',
+  description: 'Política de privacidad de Cuentas Streaming. Conoce cómo protegemos y manejamos tu información personal.',
+  keywords: 'política de privacidad, privacidad, protección de datos, información personal',
+  type: 'website',
+})
 
 export default function PrivacyPage() {
   return (

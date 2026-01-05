@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
-import { User, Settings, LogOut, UserCircle } from 'lucide-react'
+import { User, Settings, LogOut, UserCircle, LayoutDashboard } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -24,6 +24,9 @@ import { useUserAPI } from '@/queries/client/users'
 const AccountMenu = () => {
   const { t } = useTranslation()
   const { user } = useUserAPI()
+  
+  // Check if user is admin or superadmin
+  const isAdmin = user?.role === 'admin' || user?.role === 'superadmin'
 
   return (
     <DropdownMenu>
@@ -81,6 +84,14 @@ const AccountMenu = () => {
               <span>{t('profile')}</span>
             </Link>
           </DropdownMenuItem>
+          {isAdmin && (
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard" className="flex cursor-pointer items-center gap-2">
+                <LayoutDashboard className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
             <Link href="/dashboard/users/profile" className="flex cursor-pointer items-center gap-2">
               <Settings className="h-4 w-4" />

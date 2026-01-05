@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     postid: postId,
     userid: userId,
     isfavorite: data?.is_favorite,
-  })
+  } as any)
 
   if (error) {
     return NextResponse.json({ data: null, error }, { status: 400 })

@@ -1,14 +1,27 @@
-# NextJS 14 Supabase blog
+# Cuentas Streaming - Plataforma de Contenido
 
-This is a dashboard starter template for the [NextJS](https://nextjs.org) 14 app router using supabase based on [shadcn-ui](https://ui.shadcn.com).
+Plataforma de contenido y sorteos construida con [Next.js](https://nextjs.org) 16 y Supabase. Comparte publicaciones, participa en sorteos y conecta con la comunidad.
 
 ## Screenshots
 
 ![screenshot](./screenshot.png)
 
-## Denpendencies
+## Características
 
-- NextJS 14 + Typescript + Tailwind
+- ✨ Plataforma de contenido con sistema de publicaciones
+- 🎁 Sistema de sorteos con protección anti-abuso
+- 👥 Sistema de roles (guest, user, admin, superadmin)
+- 🔐 Autenticación con Supabase (OAuth + Email)
+- 📝 Editor de contenido con CKEditor 5
+- 🌐 Internacionalización (i18n)
+- 🎨 UI moderna con Shadcn UI
+- 📱 PWA (Progressive Web App)
+- 🔒 Rate limiting y protección DDoS
+- 🎯 SEO optimizado para redes sociales
+
+## Tecnologías
+
+- Next.js 16 + TypeScript + Tailwind CSS
 - Shadcn UI (Radix UI) + TimePicker + TagInput
 - react-hook-form + zod
 - react-i18next + zod-i18n-map
@@ -21,80 +34,86 @@ This is a dashboard starter template for the [NextJS](https://nextjs.org) 14 app
 
 ## Table of Contents
 
-- [NextJS 14 Supabase blog](#nextjs-14-supabase-blog)
+- [Cuentas Streaming - Plataforma de Contenido](#cuentas-streaming---plataforma-de-contenido)
   - [Screenshots](#screenshots)
-  - [Denpendencies](#denpendencies)
+  - [Características](#características)
+  - [Tecnologías](#tecnologías)
   - [Table of Contents](#table-of-contents)
-  - [Folder and file Structure](#folder-and-file-structure)
-  - [Getting Started](#getting-started)
-  - [Generate Favicon](#generate-favicon)
-  - [Docs](#docs)
-  - [Define App URL](#define-app-url)
-  - [Troubleshooting](#troubleshooting)
-  - [License](#license)
-  - [Reference](#reference)
+  - [Estructura del Proyecto](#estructura-del-proyecto)
+  - [Comenzar](#comenzar)
+  - [Generar Favicon](#generar-favicon)
+  - [Documentación](#documentación)
+  - [Configurar App URL](#configurar-app-url)
+  - [Solución de Problemas](#solución-de-problemas)
+  - [Licencia](#licencia)
+  - [Referencias](#referencias)
 
-## Folder and file Structure
+## Estructura del Proyecto
 
 The folder and file structure is based on nextjs app router [next.js project structure](https://nextjs.org/docs/getting-started/project-structure).
 
 ```txt
 .
 ├── app/                        # App Router
-│   └── api/
-│       ├── auth/               # Public API for authentication
-│       └── v1/                 # APIs that require authentication
-├── components/                 # React components
-├── config/                     # Configuration for site
+│   ├── (landing)/              # Landing page
+│   ├── api/
+│   │   ├── auth/               # API pública para autenticación
+│   │   └── v1/                 # APIs que requieren autenticación
+│   ├── auth/                   # Páginas de autenticación
+│   ├── dashboard/              # Panel de control
+│   ├── [username]/             # Perfiles de usuario
+│   └── layout.tsx              # Layout principal
+├── components/                 # Componentes React
+├── config/                     # Configuración del sitio
 ├── context/
-│   └── app-provider.ts         # Register context provider
-├── hooks/
-├── docs/                       # Documents
-├── lib/                        # Utility functions
-├── public/                     # Static assets to be served
-│   └── [locales]/              # Internationalization
-├── queries/                    # SWR for API
-├── screenshots/                # Screenshots
+│   └── app-provider.ts         # Registro de proveedores de contexto
+├── hooks/                      # Custom hooks
+├── docs/                       # Documentación
+├── lib/                        # Funciones de utilidad
+├── public/                     # Archivos estáticos
+│   └── [locales]/              # Internacionalización
+├── queries/                    # SWR para API
+├── screenshots/                # Capturas de pantalla
 ├── store/                      # Redux reducers
 ├── supabase/                   # Supabase CLI
-├── types/
+├── types/                      # Tipos TypeScript
 ├── components.json             # Shadcn UI
-├── i18next.config.ts           # Internationalization
-└── package.json                # Project dependencies and scripts
+├── i18next.config.ts           # Internacionalización
+└── package.json                # Dependencias y scripts
 ```
 
-## Getting Started
+## Comenzar
 
-Find and replace the following text in `supabase/seed.sql` and run sql.
+Encuentra y reemplaza el siguiente texto en `supabase/seed.sql` y ejecuta el SQL.
 
 - `YOUR_BUCKET_ID`
 - `username@example.com`
 
-Clone the repository to the current directory.
+Clona el repositorio en el directorio actual.
 
 ```shell
 git clone https://github.com/w3labkr/nextjs14-supabase-blog.git .
 ```
 
-Install all modules listed as dependencies.
+Instala todos los módulos listados como dependencias.
 
 ```shell
 npm install
 ```
 
-Start the development server.
+Inicia el servidor de desarrollo.
 
 ```shell
 npm run dev
 ```
 
-## Generate Favicon
+## Generar Favicon
 
 Add `favicon.ico` file to `/app` directory.
 
 - [Favicon.ico & App Icon Generator](https://www.favicon-generator.org)
 
-Generate manifest and splash screen.
+Genera el manifest y splash screen.
 
 ```shell
 vim public/manifest.json
@@ -105,32 +124,46 @@ vim public/manifest.json
   [PWA Manifest Generator](https://www.simicart.com/manifest-generator.html)
 - [Custom Splash Screen on iOS](https://appsco.pe/developer/splash-screens)
 
-## Docs
+## Documentación
 
-- [INSTALLATION](./docs/INSTALLATION.md)
-- [CONFIGURATION](./docs/CONFIGURATION.md)
-- [DEPLOYING](./docs/DEPLOYING.md)
-- [LINTER](./docs/LINTER.md)
-- [EXAMPLES](./docs/EXAMPLES.md)
+### Resumen General
+- [PROJECT_SUMMARY](./PROJECT_SUMMARY.md) - 📋 Resumen completo del proyecto
 
-## Define App URL
+### Configuración y Despliegue
+- [INSTALLATION](./docs/INSTALLATION.md) - Instalación del proyecto
+- [CONFIGURATION](./docs/CONFIGURATION.md) - Configuración general
+- [DEPLOYING](./docs/DEPLOYING.md) - Guía de despliegue
+- [DEPLOYMENT_ENV_VARS](./DEPLOYMENT_ENV_VARS.md) - Variables de entorno para despliegue
+
+### SEO y Marketing
+- [SEO_DOCUMENTATION](./docs/SEO_DOCUMENTATION.md) - ⭐ Guía completa de SEO, tracking y social media
+
+### Características y Permisos
+- [ROLE_MANAGEMENT](./ROLE_MANAGEMENT.md) - Sistema de roles
+- [POST_PERMISSIONS](./POST_PERMISSIONS.md) - Permisos de publicaciones
+- [GIVEAWAYS_COMPLETE_GUIDE](./GIVEAWAYS_COMPLETE_GUIDE.md) - ⭐ Guía completa de sorteos (TODO EN UNO)
+- [GIVEAWAYS_FEATURE_PLAN](./GIVEAWAYS_FEATURE_PLAN.md) - Plan técnico detallado (referencia)
+- [IMPLEMENTATION_SUMMARY](./IMPLEMENTATION_SUMMARY.md) - Resumen de implementación
+
+## Configurar App URL
 
 - Environment: `NEXT_PUBLIC_APP_URL=`
 - Supabase Auth: Authentication > URL Configuration > Redirect URLs
 - Google cloud console: API > Credentials
 - Google cloud console: API > OAuth
 
-## Troubleshooting
+## Solución de Problemas
 
-- For eslint, check the [latest version](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin?activeTab=versions) of `@typescript-eslint/eslint-plugin` and upgrade.
-- For ckeditor5, check the downloadable version in the [online builder](https://ckeditor.com/ckeditor-5/online-builder/) and upgrade.
-- If an error occurs in the pre-rendered `sitemap.xml`, access the page in development mode and run a rebuild.
+- Para eslint, verifica la [última versión](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin?activeTab=versions) de `@typescript-eslint/eslint-plugin` y actualiza.
+- Para ckeditor5, verifica la versión descargable en el [online builder](https://ckeditor.com/ckeditor-5/online-builder/) y actualiza.
+- Si ocurre un error en el `sitemap.xml` pre-renderizado, accede a la página en modo desarrollo y ejecuta una reconstrucción.
+- Si obtienes error "Invalid URL" durante el build, asegúrate de configurar `NEXT_PUBLIC_APP_URL` en tu plataforma de despliegue.
 
-## License
+## Licencia
 
 This software license under the [MIT License](LICENSE).
 
-## Reference
+## Referencias
 
 - [shadcn-ui/ui](https://github.com/shadcn-ui/ui)
 - [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy)

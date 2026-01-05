@@ -1,7 +1,16 @@
 import * as React from 'react'
+import type { Metadata } from 'next'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { generateSEOMetadata } from '@/lib/seo/metadata'
+
+export const metadata: Metadata = generateSEOMetadata({
+  title: 'Términos y Condiciones',
+  description: 'Términos y condiciones de uso de Cuentas Streaming. Lee nuestras políticas y normas de la plataforma.',
+  keywords: 'términos y condiciones, términos de uso, políticas, normas',
+  type: 'website',
+})
 
 export default function TermsPage() {
   return (

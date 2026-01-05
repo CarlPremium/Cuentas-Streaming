@@ -8,11 +8,11 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'NextJS supabase dashboard',
-  title: 'NextJS supabase dashboard',
+  name: 'Cuentas Streaming',
+  title: 'Cuentas Streaming - Plataforma de Contenido',
   description:
-    'This is a dashboard starter template for the NextJS 14 app router using supabase based on shadcn-ui.',
-  symbol: 'Activity', // LucideIcon
+    'Plataforma de contenido y sorteos. Comparte tus publicaciones, participa en sorteos y conecta con la comunidad.',
+  symbol: 'Sparkles', // LucideIcon
 }
 
 export interface PricingPlan {

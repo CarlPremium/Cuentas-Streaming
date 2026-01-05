@@ -1,4 +1,5 @@
 import * as React from 'react'
+import type { Metadata } from 'next'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -12,6 +13,7 @@ import {
 } from '@/components/hentry'
 
 import { absoluteUrl } from '@/lib/utils'
+import { generateSEOMetadata } from '@/lib/seo/metadata'
 import { getPostsAPI } from '@/queries/server/posts'
 import { getTranslation } from '@/hooks/i18next'
 import { type Post } from '@/types/database'
@@ -19,6 +21,24 @@ import { type Post } from '@/types/database'
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
 export const revalidate = 0
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ q?: string }>
+}): Promise<Metadata> {
+  const params = await searchParams
+  const q = params?.q || ''
+
+  return generateSEOMetadata({
+    title: q ? `Resultados de búsqueda: ${q}` : 'Buscar',
+    description: q
+      ? `Resultados de búsqueda para "${q}". Encuentra publicaciones relevantes en nuestra plataforma.`
+      : 'Busca publicaciones, autores y contenido en nuestra plataforma.',
+    keywords: q ? `búsqueda, ${q}, publicaciones, contenido` : 'búsqueda, publicaciones, contenido',
+    type: 'website',
+  })
+}
 
 export default async function SearchPage({
   searchParams,

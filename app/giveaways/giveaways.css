@@ -1,0 +1,612 @@
+/* ============================================
+   GIVEAWAYS PAGE - COMPLETE SCOPED STYLES
+   High-quality design matching documentation
+   ============================================ */
+
+/* ============================================
+   COMPREHENSIVE WHITE/LIGHT COLOR PREVENTION
+   ============================================ */
+
+/* Remove any white backgrounds */
+.giveaways-page *[class*="bg-white"],
+.giveaways-page *[style*="background: white"],
+.giveaways-page *[style*="background: #fff"],
+.giveaways-page *[style*="background-color: white"],
+.giveaways-page *[style*="background-color: #fff"],
+body:has(.giveaways-page) *[class*="bg-white"] {
+  background: hsl(222 47% 10% / 0.5) !important;
+}
+
+/* Remove white text */
+.giveaways-page *[class*="text-white"]:not(button *),
+.giveaways-page *[style*="color: white"]:not(button *),
+.giveaways-page *[style*="color: #fff"]:not(button *) {
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Override any light/white borders */
+.giveaways-page *[class*="border-white"],
+.giveaways-page *[style*="border-color: white"],
+.giveaways-page *[style*="border-color: #fff"] {
+  border-color: hsl(222 47% 20%) !important;
+}
+
+/* Remove white shadows */
+.giveaways-page *[style*="box-shadow"][style*="255, 255, 255"] {
+  box-shadow: 0 4px 20px hsl(0 0% 0% / 0.2) !important;
+}
+
+/* Override any rgba white values */
+.giveaways-page *[style*="rgba(255, 255, 255"] {
+  background: hsl(222 47% 10% / 0.5) !important;
+}
+
+/* ============================================
+   BUTTON OVERRIDES - Force Cyan/Green Gradient
+   ============================================ */
+
+/* Override ALL buttons with gradient classes */
+.giveaways-page button[class*="gradient"],
+.giveaways-page button[class*="bg-gradient"],
+.giveaways-page .group button,
+body:has(.giveaways-page) button[class*="gradient"],
+body:has(.giveaways-page) button[class*="bg-gradient"] {
+  background: linear-gradient(to right, hsl(180 100% 50%), hsl(150 100% 50%)) !important;
+  color: hsl(222 47% 6%) !important;
+  font-weight: 700 !important;
+  border: none !important;
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.3) !important;
+}
+
+/* Button hover states */
+.giveaways-page button[class*="gradient"]:hover,
+body:has(.giveaways-page) button[class*="gradient"]:hover {
+  opacity: 0.9 !important;
+  transform: scale(1.05) !important;
+}
+
+/* Button active states */
+.giveaways-page button[class*="gradient"]:active,
+body:has(.giveaways-page) button[class*="gradient"]:active {
+  transform: scale(0.95) !important;
+}
+
+/* Ensure button text and icons are dark */
+.giveaways-page button[class*="gradient"] *,
+.giveaways-page button[class*="gradient"] span,
+.giveaways-page button[class*="gradient"] svg,
+body:has(.giveaways-page) button[class*="gradient"] *,
+body:has(.giveaways-page) button[class*="gradient"] span,
+body:has(.giveaways-page) button[class*="gradient"] svg {
+  color: hsl(222 47% 6%) !important;
+}
+
+/* Remove any conflicting background images */
+.giveaways-page button {
+  background-image: none !important;
+}
+
+.giveaways-page button[class*="gradient"] {
+  background-image: linear-gradient(to right, hsl(180 100% 50%), hsl(150 100% 50%)) !important;
+}
+
+/* ============================================
+   ROOT CONTAINER & BACKGROUND
+   ============================================ */
+.giveaways-page {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 20% 0%, hsl(280 85% 65% / 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 0%, hsl(180 100% 50% / 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 100%, hsl(220 100% 60% / 0.1) 0%, transparent 50%),
+              hsl(222 47% 6%);
+  position: relative;
+}
+
+/* Grid background effect */
+.giveaways-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(hsl(222 47% 20% / 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(222 47% 20% / 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* ============================================
+   GLOBAL OVERRIDES - Force Dark Theme
+   ============================================ */
+
+/* Reset all backgrounds and borders */
+.giveaways-page * {
+  border-color: hsl(222 47% 20%);
+}
+
+/* Text colors */
+.giveaways-page h1,
+.giveaways-page h2,
+.giveaways-page h3,
+.giveaways-page h4,
+.giveaways-page h5,
+.giveaways-page h6 {
+  color: hsl(210 40% 98%);
+}
+
+.giveaways-page p,
+.giveaways-page span,
+.giveaways-page div {
+  color: hsl(210 40% 98%);
+}
+
+/* Override Tailwind utility classes */
+.giveaways-page .text-foreground {
+  color: hsl(210 40% 98%) !important;
+}
+
+.giveaways-page .text-muted-foreground {
+  color: hsl(215 20% 65%) !important;
+}
+
+.giveaways-page .bg-muted {
+  background: hsl(222 47% 12% / 0.4) !important;
+}
+
+.giveaways-page .bg-card {
+  background: hsl(222 47% 10% / 0.4) !important;
+  backdrop-filter: blur(12px);
+}
+
+.giveaways-page .border-border {
+  border-color: hsl(222 47% 20%) !important;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+.giveaways-page .giveaways-hero {
+  position: relative;
+  overflow: hidden;
+  padding-top: 4.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid hsl(222 47% 20%);
+}
+
+@media (min-width: 640px) {
+  .giveaways-page .giveaways-hero {
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.giveaways-page .giveaways-hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Animated gradient orbs */
+.giveaways-page .giveaways-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  animation: giveawaysFloat 10s ease-in-out infinite;
+}
+
+.giveaways-page .giveaways-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, hsl(280 85% 65% / 0.25) 0%, transparent 70%);
+  top: -300px;
+  left: -150px;
+}
+
+.giveaways-page .giveaways-orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, hsl(180 100% 50% / 0.2) 0%, transparent 70%);
+  top: -200px;
+  right: -150px;
+  animation-delay: 3s;
+}
+
+/* Badge with glow */
+.giveaways-page .giveaways-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, hsl(180 100% 50% / 0.12), hsl(150 100% 50% / 0.12));
+  border: 1px solid hsl(180 100% 50% / 0.25);
+  color: hsl(180 100% 70%);
+  font-size: 0.875rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px hsl(180 100% 50% / 0.15);
+}
+
+.giveaways-page .giveaways-badge-icon {
+  font-size: 1rem;
+  animation: giveawaysPulse 2s ease-in-out infinite;
+}
+
+/* Title with gradient */
+.giveaways-page .giveaways-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-family: var(--font-heading, 'Outfit', system-ui, sans-serif);
+}
+
+.giveaways-page .giveaways-title-gradient {
+  background: linear-gradient(135deg, 
+    hsl(180 100% 70%) 0%, 
+    hsl(150 100% 60%) 50%, 
+    hsl(180 100% 70%) 100%
+  );
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: giveawaysGradientShift 8s ease infinite;
+}
+
+.giveaways-page .giveaways-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: hsl(215 20% 75%);
+  max-width: 36rem;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Stats cards */
+.giveaways-page .giveaways-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .giveaways-page .giveaways-stats {
+    gap: 1.5rem;
+    padding-top: 2rem;
+  }
+}
+
+.giveaways-page .giveaways-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 1.25rem;
+  background: hsl(222 47% 10% / 0.4);
+  border: 1px solid hsl(222 47% 20%);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px hsl(0 0% 0% / 0.2);
+}
+
+@media (min-width: 640px) {
+  .giveaways-page .giveaways-stat-card {
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+}
+
+.giveaways-page .giveaways-stat-card:hover {
+  transform: translateY(-4px);
+  border-color: hsl(180 100% 50% / 0.3);
+  box-shadow: 0 8px 30px hsl(180 100% 50% / 0.15);
+}
+
+.giveaways-page .giveaways-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .giveaways-page .giveaways-stat-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+.giveaways-page .giveaways-stat-card:hover .giveaways-stat-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.giveaways-page .giveaways-stat-icon-primary {
+  background: linear-gradient(135deg, hsl(180 100% 50% / 0.15), hsl(180 100% 50% / 0.08));
+  color: hsl(180 100% 70%);
+}
+
+.giveaways-page .giveaways-stat-icon-accent {
+  background: linear-gradient(135deg, hsl(150 100% 50% / 0.15), hsl(150 100% 50% / 0.08));
+  color: hsl(150 100% 70%);
+}
+
+.giveaways-page .giveaways-stat-icon-gold {
+  background: linear-gradient(135deg, hsl(330 100% 65% / 0.15), hsl(330 100% 65% / 0.08));
+  color: hsl(330 100% 75%);
+}
+
+.giveaways-page .giveaways-stat-content {
+  text-align: left;
+}
+
+.giveaways-page .giveaways-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(210 40% 98%);
+  line-height: 1;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .giveaways-page .giveaways-stat-value {
+    font-size: 1.75rem;
+  }
+}
+
+.giveaways-page .giveaways-stat-label {
+  font-size: 0.75rem;
+  color: hsl(215 20% 65%);
+  margin: 0.25rem 0 0 0;
+}
+
+/* ============================================
+   GIVEAWAY CARDS - Glass Effect
+   ============================================ */
+
+.giveaways-page .group {
+  background: hsl(222 47% 10% / 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(222 47% 20% / 0.5);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 30px hsl(0 0% 0% / 0.2),
+    inset 0 1px 0 hsl(0 0% 100% / 0.05);
+}
+
+.giveaways-page .group:hover {
+  transform: translateY(-8px) scale(1.01);
+  border-color: hsl(180 100% 50% / 0.3);
+  box-shadow: 
+    0 20px 60px hsl(180 100% 50% / 0.15),
+    0 8px 30px hsl(0 0% 0% / 0.3),
+    inset 0 1px 0 hsl(0 0% 100% / 0.1);
+}
+
+/* Featured cards get cyan glow */
+.giveaways-page .group.border-2 {
+  border-color: hsl(180 100% 50% / 0.4);
+  box-shadow: 0 0 50px hsl(180 100% 50% / 0.15);
+}
+
+/* Card image section - NO WHITE GRADIENTS */
+.giveaways-page .group .relative.h-44,
+.giveaways-page .group .relative.sm\:h-48 {
+  background: linear-gradient(135deg, hsl(180 100% 50% / 0.05), hsl(150 100% 50% / 0.03));
+}
+
+/* Remove any white/light overlays from images */
+.giveaways-page .group .bg-gradient-to-t {
+  background: linear-gradient(to top, hsl(222 47% 6%), hsl(222 47% 6% / 0.8), hsl(222 47% 6% / 0.4)) !important;
+}
+
+/* Ensure no white shimmer effects */
+.giveaways-page .animate-shimmer {
+  display: none !important;
+}
+
+/* Progress bars */
+.giveaways-page .group .h-2\.5 {
+  background: hsl(222 47% 12% / 0.4);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+/* ============================================
+   SKELETON LOADING
+   ============================================ */
+
+.giveaways-page .giveaways-skeleton {
+  height: 28rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    90deg,
+    hsl(222 47% 10% / 0.3) 0%,
+    hsl(222 47% 12% / 0.5) 50%,
+    hsl(222 47% 10% / 0.3) 100%
+  );
+  background-size: 200% 100%;
+  animation: giveawaysShimmer 2s infinite;
+  border: 1px solid hsl(222 47% 20%);
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.giveaways-page .giveaways-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.giveaways-page .giveaways-empty-icon {
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1.5rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, hsl(180 100% 50% / 0.08), hsl(150 100% 50% / 0.08));
+  border: 1px solid hsl(222 47% 20%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(215 20% 65%);
+}
+
+.giveaways-page .giveaways-empty-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: hsl(210 40% 98%);
+  margin: 0 0 0.75rem 0;
+}
+
+.giveaways-page .giveaways-empty-text {
+  font-size: 1rem;
+  color: hsl(215 20% 65%);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================
+   MODAL OVERRIDES
+   ============================================ */
+
+/* Modal backdrop */
+.giveaways-page ~ div[class*="fixed"][class*="inset-0"] {
+  background: hsl(222 47% 6% / 0.9) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Modal container - force dark background */
+.giveaways-page ~ div [role="dialog"],
+.giveaways-page ~ div .glass-card,
+body:has(.giveaways-page) div[class*="fixed"] > div[class*="relative"] {
+  background: linear-gradient(135deg, hsl(222 47% 10% / 0.95), hsl(222 47% 8% / 0.95)) !important;
+  backdrop-filter: blur(20px) !important;
+  border-color: hsl(180 100% 50% / 0.3) !important;
+}
+
+/* Modal text colors */
+body:has(.giveaways-page) div[class*="fixed"] h3,
+body:has(.giveaways-page) div[class*="fixed"] p,
+body:has(.giveaways-page) div[class*="fixed"] span {
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Modal inputs - force dark styling */
+.giveaways-page ~ div input,
+body:has(.giveaways-page) div[class*="fixed"] input {
+  background: hsl(222 47% 12% / 0.6) !important;
+  border: 1px solid hsl(222 47% 20%) !important;
+  color: hsl(210 40% 98%) !important;
+}
+
+.giveaways-page ~ div input::placeholder,
+body:has(.giveaways-page) div[class*="fixed"] input::placeholder {
+  color: hsl(215 20% 60%) !important;
+}
+
+.giveaways-page ~ div input:focus,
+body:has(.giveaways-page) div[class*="fixed"] input:focus {
+  border-color: hsl(180 100% 50% / 0.5) !important;
+  box-shadow: 0 0 0 2px hsl(180 100% 50% / 0.2) !important;
+  outline: none !important;
+}
+
+/* Modal buttons - override any white/light styling */
+body:has(.giveaways-page) div[class*="fixed"] button:not([style*="gradient"]) {
+  background: hsl(222 47% 12% / 0.6) !important;
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Remove any white backgrounds from modal elements */
+body:has(.giveaways-page) div[class*="fixed"] [class*="bg-white"],
+body:has(.giveaways-page) div[class*="fixed"] [class*="bg-card"],
+body:has(.giveaways-page) div[class*="fixed"] [class*="bg-background"] {
+  background: transparent !important;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes giveawaysFloat {
+  0%, 100% { 
+    transform: translateY(0px) scale(1); 
+  }
+  50% { 
+    transform: translateY(-30px) scale(1.02); 
+  }
+}
+
+@keyframes giveawaysGradientShift {
+  0% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
+  100% { 
+    background-position: 0% 50%; 
+  }
+}
+
+@keyframes giveawaysShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes giveawaysPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.giveaways-page .scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.giveaways-page .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fade bottom gradient */
+.giveaways-page .giveaways-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
+  background: linear-gradient(to top, hsl(222 47% 6%), transparent);
+  pointer-events: none;
+}

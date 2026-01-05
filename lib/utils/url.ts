@@ -1,9 +1,13 @@
 export function absoluteUrl(path?: string): string {
-  const origin = process.env.NEXT_PUBLIC_APP_URL!
+  const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   const uri = origin && path ? `${origin}/${path}` : origin
   const sanitized = uri?.replace(/\/+/g, '/')?.replace(/\/+$/, '')
 
   return new URL(sanitized).toString()
+}
+
+export function getBaseUrl(): string {
+  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 }
 
 export function isAbsoluteUrl(url: string): boolean {

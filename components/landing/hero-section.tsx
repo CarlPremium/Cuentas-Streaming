@@ -16,16 +16,16 @@ const platforms = [
 
 function FloatingCard({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
   const [isVisible, setIsVisible] = useState(false)
-  
+
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), delay)
     return () => clearTimeout(timer)
   }, [delay])
 
   return (
-    <div 
+    <div
       className={`transform transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}
-      style={{ 
+      style={{
         animation: isVisible ? `float3D 8s ease-in-out infinite ${delay}ms` : 'none',
       }}
     >
@@ -91,14 +91,17 @@ export function HeroSection() {
       <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-neon-purple/30 to-transparent animate-pulse-slow" />
       <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-neon-cyan/30 to-transparent animate-pulse-slow" style={{ animationDelay: '1s' }} />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center pt-24 sm:pt-32 pb-16 sm:pb-20">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center pt-20 sm:pt-24 pb-12 sm:pb-16">
+        {/* 3D Logo with Glow Ring */}
         <FloatingCard delay={0} className="mb-6 sm:mb-8">
           <div className="relative inline-flex flex-col items-center">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-neon-green/20 text-neon-green border border-neon-green/30 mb-4 animate-bounce-gentle">
               NUEVO
             </span>
             <div className="relative">
+              {/* Outer glow ring */}
               <div className="absolute inset-0 w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-r from-neon-purple via-neon-cyan to-neon-purple animate-spin-slow opacity-50 blur-md" />
+              {/* Logo container */}
               <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-background via-secondary to-background border border-border/50 flex items-center justify-center shadow-2xl backdrop-blur-xl perspective-card">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-neon-cyan/20 via-neon-purple/30 to-neon-pink/20 flex items-center justify-center border border-border/30">
                   <span className="text-4xl sm:text-5xl font-heading font-bold text-gradient">CS</span>
@@ -108,66 +111,71 @@ export function HeroSection() {
           </div>
         </FloatingCard>
 
+        {/* Main Heading with Glitch Effect */}
         <FloatingCard delay={100}>
-          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 relative px-4">
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-3 sm:mb-4 relative">
             <span className="text-gradient-pink relative inline-block hover-glitch">
               Sorteos Premium
             </span>
           </h1>
         </FloatingCard>
-        
+
         <FloatingCard delay={200}>
-          <h2 className="font-heading text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 tracking-tight px-4">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 sm:mb-6 tracking-tight">
             Cuentas Streaming
           </h2>
         </FloatingCard>
 
+        {/* Description */}
         <FloatingCard delay={300}>
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed px-6">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed px-4">
             El canal de <span className="text-neon-cyan font-semibold glow-text-cyan">Telegram #1</span> para{' '}
             <span className="text-neon-pink font-semibold glow-text-pink">sorteos de cuentas premium</span> de streaming, gaming
             y software ¡100% GRATIS!
           </p>
         </FloatingCard>
 
+        {/* Badges */}
         <FloatingCard delay={400}>
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
             <span className="badge-live group cursor-pointer hover:scale-105 transition-transform">
-              <span className="w-2 h-2 rounded-full bg-white animate-ping absolute" />
-              <span className="w-2 h-2 rounded-full bg-white relative" />
-              <span className="text-background font-semibold">En Vivo</span>
+              <span className="w-2 h-2 rounded-full bg-background animate-ping absolute" />
+              <span className="w-2 h-2 rounded-full bg-background relative" />
+              En Vivo
             </span>
             <span className="badge-stats hover:border-neon-cyan/50 hover:shadow-lg hover:shadow-neon-cyan/20 transition-all cursor-pointer">
               <Users className="w-4 h-4 text-neon-cyan" />
-              <span className="text-foreground">+64,000 miembros</span>
+              +64,000 miembros
             </span>
             <span className="badge-stats hover:border-neon-pink/50 hover:shadow-lg hover:shadow-neon-pink/20 transition-all cursor-pointer">
               <Gift className="w-4 h-4 text-neon-pink" />
-              <span className="text-foreground">100% Gratis</span>
+              100% Gratis
             </span>
           </div>
         </FloatingCard>
 
+        {/* CTA Buttons */}
         <FloatingCard delay={500}>
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 px-4">
-            <Button className="btn-primary group relative overflow-hidden w-full sm:w-auto text-background font-semibold">
+            <Button className="btn-primary group relative overflow-hidden w-full sm:w-auto">
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              <Send className="w-4 h-4 mr-2 text-background" />
-              <span className="text-background">Únete GRATIS Ahora</span>
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform text-background" />
+              <Send className="w-4 h-4 mr-2" />
+              Únete GRATIS Ahora
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="outline" className="btn-secondary group w-full sm:w-auto text-foreground font-semibold">
-              <Play className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform text-foreground" />
-              <span className="text-foreground">Ver Sorteos</span>
+            <Button variant="outline" className="btn-secondary group w-full sm:w-auto">
+              <Play className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+              Ver Sorteos
             </Button>
           </div>
         </FloatingCard>
 
+        {/* Sorteos Info Card with 3D tilt */}
         <FloatingCard delay={600}>
           <div className="glass-card p-4 sm:p-6 max-w-md mx-auto mb-8 sm:mb-10 hover:shadow-2xl hover:shadow-neon-purple/20 transition-all duration-500 group perspective-card-hover cursor-pointer mx-4 sm:mx-auto">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-neon-purple to-neon-cyan flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-neon-purple/30 to-neon-cyan/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-neon-cyan" />
               </div>
               <div className="text-left">
                 <h3 className="font-heading font-semibold text-foreground text-sm sm:text-base">Sorteos Diarios</h3>

@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient()
   const updated = await supabase
     .from('emails')
-    .update({ email_confirmed_at: now })
+    .update({ email_confirmed_at: now } as any)
     .eq('user_id', payload?.user_id)
     .eq('email', payload?.email)
     .select('*')

@@ -27,14 +27,18 @@ export async function GET(request: NextRequest) {
     if (error) return new Response(error?.message, { status: 400 })
   }
 
-  const { data: users } = await supabase.rpc('get_users', {
+  const { data: users, error: usersError } = await supabase.rpc('get_users', {
     userrole: 'superadmin',
   })
 
-  if (Array.isArray(users) && users?.length > 0) {
-    for (let i = 0; i < users?.length; i++) {
+  if (usersError || !users) {
+    return new Response(usersError?.message || 'Failed to fetch users', { status: 400 })
+  }
+
+  if (Array.isArray(users) && users.length > 0) {
+    for (let i = 0; i < users.length; i++) {
       const { error } = await supabase.rpc('create_new_posts', {
-        data: generateRecentPosts(users[i], 11),
+        data: generateRecentPosts(users[i], 11) as any,
       })
       if (error) continue
     }

@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Search, Filter, Calendar, User, Tag as TagIcon, TrendingUp } from 'lucide-react'
+import type { Metadata } from 'next'
+import { Search, Filter, Calendar, User, Tag as TagIcon, TrendingUp, Clock, Eye, Sparkles } from 'lucide-react'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -13,13 +14,46 @@ import {
 } from '@/components/hentry'
 
 import { absoluteUrl, cn } from '@/lib/utils'
+import { generateSEOMetadata } from '@/lib/seo/metadata'
 import { getTranslation } from '@/hooks/i18next'
 import { getPostsAPI } from '@/queries/server/posts'
 import { type Post } from '@/types/database'
 
+import './posts.css'
+
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
 export const revalidate = 0
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ tag?: string; q?: string }>
+}): Promise<Metadata> {
+  const params = await searchParams
+  const tag = params?.tag
+  const q = params?.q
+
+  let title = 'Todas las Publicaciones'
+  let description = 'Explora todas las publicaciones de nuestra comunidad. Encuentra contenido interesante sobre diversos temas.'
+
+  if (tag) {
+    title = `Publicaciones con #${tag}`
+    description = `Explora todas las publicaciones etiquetadas con #${tag}. Descubre contenido relacionado con este tema.`
+  }
+
+  if (q) {
+    title = `Búsqueda: ${q}`
+    description = `Resultados de búsqueda para "${q}". Encuentra publicaciones relevantes en nuestra plataforma.`
+  }
+
+  return generateSEOMetadata({
+    title,
+    description,
+    keywords: tag ? `${tag}, publicaciones, blog, contenido` : 'publicaciones, blog, contenido, comunidad',
+    type: 'website',
+  })
+}
 
 export default async function PostsPage({
   searchParams,
@@ -60,22 +94,52 @@ export default async function PostsPage({
   return (
     <>
       <Header />
-      <main className="min-h-screen">
-        {/* Compact Header */}
-        <div className="border-b bg-muted/30">
-          <div className="container py-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <TagIcon className="h-5 w-5 text-primary" />
+      <main className="blog-posts-page min-h-screen">
+        {/* Modern Hero Section */}
+        <div className="blog-hero">
+          <div className="container relative z-10 py-12 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-4xl text-center">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary backdrop-blur-sm">
+                <Sparkles className="h-4 w-4" />
+                <span>{tag ? `Explorando #${tag}` : 'Descubre Contenido Increíble'}</span>
+              </div>
+              
+              <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+                {tag ? (
+                  <>
+                    Publicaciones con{' '}
+                    <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      #{tag}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Explora Nuestro{' '}
+                    <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      Blog
+                    </span>
+                  </>
+                )}
+              </h1>
+              
+              <p className="mx-auto mb-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+                {tag 
+                  ? `Descubre ${total} ${total === 1 ? 'publicación' : 'publicaciones'} relacionadas con este tema`
+                  : `${total} ${total === 1 ? 'historia' : 'historias'} esperando ser descubiertas`
+                }
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="blog-icon-container flex h-8 w-8 items-center justify-center rounded-lg">
+                    <TagIcon className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="font-medium">{total} Posts</span>
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold">
-                    {tag ? `#${tag}` : t('posts')}
-                  </h1>
-                  <p className="text-sm text-muted-foreground">
-                    {total} {total === 1 ? t('post') : t('posts')}
-                  </p>
+                <span className="text-muted-foreground/50">•</span>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                  <span>Contenido Actualizado</span>
                 </div>
               </div>
             </div>
@@ -83,13 +147,13 @@ export default async function PostsPage({
         </div>
 
         {/* Main Content */}
-        <div className="container py-8">
+        <div className="container py-12 sm:py-16 lg:py-20">
           <PagingProvider value={{ total, page, perPage, pageSize }}>
-            <div className="space-y-8">
+            <div className="space-y-12">
               {Array.isArray(posts) && posts?.length > 0 ? (
                 <>
                   <PostList posts={posts} />
-                  <div className="flex justify-center">
+                  <div className="flex justify-center pt-8">
                     <Paging />
                   </div>
                 </>
@@ -112,7 +176,7 @@ interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
 const PostList = ({ posts, ...props }: PostListProps) => {
   return (
     <div
-      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      className="blog-grid"
       {...props}
     >
       {posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)}
@@ -127,14 +191,14 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 const PostItem = ({ post, ...props }: PostItemProps) => {
   const { title, description, date, author, meta, thumbnail_url } = post
   const username = author?.username
+  
+  // Calculate reading time (rough estimate: 200 words per minute)
+  const wordCount = description?.split(' ').length || 0
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200))
 
   return (
     <article 
-      className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-lg border bg-card",
-        "shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/5",
-        "hover:-translate-y-0.5"
-      )}
+      className="blog-card group"
       {...props}
     >
       {/* Thumbnail */}
@@ -144,34 +208,42 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
       />
       
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
+      <div className="flex flex-1 flex-col gap-3 p-5">
         {/* Tags */}
-        <EntryTags pathname="/posts" meta={meta} />
+        <div className="blog-tags">
+          <EntryTags pathname="/posts" meta={meta} />
+        </div>
         
         {/* Title */}
         <div className="flex-1">
-          <EntryTitle 
-            href={post?.permalink ?? '#'} 
-            text={title}
-            className="text-lg font-bold leading-snug transition-colors group-hover:text-primary"
-          />
+          <a href={post?.permalink ?? '#'} className="block">
+            <h3 className="blog-title">
+              {title}
+            </h3>
+          </a>
         </div>
         
         {/* Description */}
         <EntrySummary 
           text={description} 
-          className="text-xs text-muted-foreground"
+          className="line-clamp-3 text-sm leading-relaxed text-muted-foreground"
         />
         
+        {/* Reading Time Badge */}
+        <div className="reading-time">
+          <Clock className="h-3.5 w-3.5" />
+          <span>{readingTime} min lectura</span>
+        </div>
+        
         {/* Footer */}
-        <div className="flex items-center gap-2 border-t pt-2.5 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3 w-3" />
+        <div className="blog-meta">
+          <div className="blog-meta-item">
+            <Calendar className="h-3.5 w-3.5" />
             <EntryPublished dateTime={date ?? undefined} />
           </div>
           <span className="text-muted-foreground/50">•</span>
-          <div className="flex items-center gap-1 truncate">
-            <User className="h-3 w-3 flex-shrink-0" />
+          <div className="blog-meta-item flex-1 truncate">
+            <User className="h-3.5 w-3.5 flex-shrink-0" />
             <EntryAuthor
               href={username ? absoluteUrl(`/${username}`) : '#'}
               author={author}
@@ -180,9 +252,6 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
           </div>
         </div>
       </div>
-      
-      {/* Hover Effect Overlay */}
-      <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-primary opacity-0 transition-opacity group-hover:opacity-100" />
     </article>
   )
 }
@@ -195,10 +264,10 @@ interface PostThumbnailProps extends React.HTMLAttributes<HTMLAnchorElement> {
 const PostThumbnail = ({ href, backgroundImage, ...props }: PostThumbnailProps) => {
   if (!backgroundImage) {
     return (
-      <a href={href} className="relative block" {...props}>
-        <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/10 via-accent/10 to-secondary">
+      <a href={href} className="blog-thumbnail" {...props}>
+        <div className="blog-thumbnail-placeholder">
           <div className="absolute inset-0 flex items-center justify-center">
-            <TagIcon className="h-10 w-10 text-muted-foreground/20" />
+            <TagIcon className="h-12 w-12 text-muted-foreground/20" />
           </div>
         </div>
       </a>
@@ -206,17 +275,12 @@ const PostThumbnail = ({ href, backgroundImage, ...props }: PostThumbnailProps) 
   }
 
   return (
-    <a href={href} className="relative block overflow-hidden" {...props}>
+    <a href={href} className="blog-thumbnail" {...props}>
       <div
-        className={cn(
-          "relative aspect-[16/9] bg-cover bg-center bg-no-repeat",
-          "transition-all duration-500 group-hover:scale-105"
-        )}
+        className="blog-thumbnail-image"
         style={{ backgroundImage }}
-      >
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      </div>
+      />
+      <div className="blog-thumbnail-overlay" />
     </a>
   )
 }
@@ -229,12 +293,12 @@ interface EmptyStateProps {
 
 const EmptyState = ({ tag, t }: EmptyStateProps) => {
   return (
-    <div className="flex min-h-[300px] flex-col items-center justify-center rounded-lg border-2 border-dashed bg-muted/20 p-8 text-center">
-      <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-        <Search className="h-8 w-8 text-muted-foreground" />
+    <div className="blog-empty-state">
+      <div className="blog-empty-icon">
+        <Search className="h-10 w-10 text-muted-foreground" />
       </div>
-      <h3 className="mb-2 text-xl font-bold">{t('no_posts_found')}</h3>
-      <p className="mb-4 max-w-md text-sm text-muted-foreground">
+      <h3 className="mb-3 text-2xl font-bold">{t('no_posts_found')}</h3>
+      <p className="mx-auto mb-6 max-w-md text-muted-foreground">
         {tag 
           ? t('no_posts_with_this_tag')
           : t('no_posts_available_yet')}
@@ -242,8 +306,9 @@ const EmptyState = ({ tag, t }: EmptyStateProps) => {
       {tag && (
         <a
           href="/posts"
-          className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg transition-all hover:scale-105 hover:bg-primary/90 hover:shadow-xl"
         >
+          <TagIcon className="h-4 w-4" />
           {t('view_all_posts')}
         </a>
       )}

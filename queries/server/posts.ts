@@ -53,25 +53,25 @@ export async function getAdjacentPostAPI(
   if (!params?.userId) return { previousPost, nextPost }
 
   const supabase = await createClient()
-  const { data: adjacent } = await supabase
+  const { data: adjacent, error: adjacentError } = await supabase
     .rpc('get_adjacent_post_id', {
       postid: id,
       userid: params?.userId,
       posttype: params?.postType ?? 'post',
       poststatus: params?.status ?? 'publish',
-    })
+    } as any)
     .single()
 
-  if (adjacent?.previous_id) {
+  if (!adjacentError && adjacent && (adjacent as any).previous_id) {
     const result = await fetcher<PostAPI>(
-      `/api/v1/post?id=${adjacent?.previous_id}`
+      `/api/v1/post?id=${(adjacent as any).previous_id}`
     )
     previousPost = result?.data
   }
 
-  if (adjacent?.next_id) {
+  if (!adjacentError && adjacent && (adjacent as any).next_id) {
     const result = await fetcher<PostAPI>(
-      `/api/v1/post?id=${adjacent?.next_id}`
+      `/api/v1/post?id=${(adjacent as any).next_id}`
     )
     nextPost = result?.data
   }

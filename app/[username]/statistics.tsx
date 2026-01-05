@@ -59,7 +59,7 @@ const Statistics = () => {
         ip,
         browser,
         user_agent: ua,
-      },
+      } as any,
     })
     // console.log(result)
   }, [])

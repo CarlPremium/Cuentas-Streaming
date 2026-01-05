@@ -19,6 +19,7 @@ export {
   setUrn,
   getQueryString,
   setQueryString,
+  getBaseUrl,
 } from './url'
 export {
   setMeta,

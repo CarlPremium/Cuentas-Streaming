@@ -41,7 +41,7 @@ export default async function AccountPage() {
             </CardHeader>
             <CardContent>
               <Alert className="mb-4">
-                <LucideIcon name="AlertCircle" className="size-4" />
+                <LucideIcon name="CircleAlert" className="size-4" />
                 <AlertDescription>
                   Changing your username may have unintended side effects, such as broken links.
                 </AlertDescription>
@@ -54,7 +54,7 @@ export default async function AccountPage() {
           <Card className="border-destructive/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-destructive">
-                <LucideIcon name="AlertTriangle" className="size-5" />
+                <LucideIcon name="TriangleAlert" className="size-5" />
                 Danger Zone
               </CardTitle>
               <CardDescription>
@@ -63,7 +63,7 @@ export default async function AccountPage() {
             </CardHeader>
             <CardContent>
               <Alert variant="destructive" className="mb-4">
-                <LucideIcon name="AlertTriangle" className="size-4" />
+                <LucideIcon name="TriangleAlert" className="size-4" />
                 <AlertDescription>
                   If you delete your account, all your posts and related information will be permanently deleted and cannot be recovered.
                 </AlertDescription>

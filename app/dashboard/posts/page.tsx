@@ -12,8 +12,8 @@ import { PostList } from './post-list'
 export default function PostsPage() {
   const tabs = [
     { href: '/dashboard/posts', label: 'all_posts', icon: 'FileText' as const },
-    { href: '/dashboard/posts/published', label: 'published', icon: 'CheckCircle' as const, disabled: true },
-    { href: '/dashboard/posts/drafts', label: 'drafts', icon: 'Edit' as const, disabled: true },
+    { href: '/dashboard/posts/published', label: 'published', icon: 'CircleCheck' as const, disabled: true },
+    { href: '/dashboard/posts/drafts', label: 'drafts', icon: 'FilePenLine' as const, disabled: true },
     { href: '/dashboard/posts/scheduled', label: 'scheduled', icon: 'Clock' as const, disabled: true },
   ]
 

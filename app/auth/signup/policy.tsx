@@ -28,6 +28,14 @@ const Policy = () => {
           },
         }
       )}
+      {' y '}
+      <Link
+        href="/terms"
+        className="text-primary underline hover:no-underline"
+      >
+        Política de Cookies
+      </Link>
+      .
     </p>
   )
 }

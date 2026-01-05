@@ -15,6 +15,10 @@ export default async function DashboardLayout({
   if (user?.is_ban) redirect('/auth/blocked')
   // if (user?.deleted_at) redirect('/auth/deactivated')
 
+  // Dashboard is only accessible to admin and superadmin
+  const isAdmin = user?.role === 'admin' || user?.role === 'superadmin'
+  if (!isAdmin) redirect('/')
+
   return (
     <>
       {process.env.NODE_ENV === 'production' ? (

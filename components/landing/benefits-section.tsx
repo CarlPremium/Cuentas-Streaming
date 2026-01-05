@@ -5,36 +5,48 @@ const benefits = [
     icon: Crown,
     title: 'Cuentas Premium',
     description: 'Netflix, Spotify, Disney+, YouTube Premium, HBO Max y muchas más plataformas completamente gratis',
+    gradient: 'from-neon-purple/30 to-neon-pink/20',
+    borderGlow: 'hover:shadow-[0_0_40px_hsl(280_85%_65%_/_0.3)]',
     iconBg: 'bg-gradient-to-br from-neon-purple to-neon-pink',
   },
   {
     icon: Gift,
     title: 'Sorteos Diarios',
     description: 'Participa en sorteos exclusivos y gana cuentas premium, tarjetas de regalo y premios increíbles',
+    gradient: 'from-neon-cyan/30 to-neon-green/20',
+    borderGlow: 'hover:shadow-[0_0_40px_hsl(180_100%_50%_/_0.3)]',
     iconBg: 'bg-gradient-to-br from-neon-cyan to-neon-green',
   },
   {
     icon: ShieldCheck,
     title: '100% Garantizado',
     description: 'Todas las cuentas están verificadas y garantizadas. Soporte 24/7 para cualquier inconveniente',
+    gradient: 'from-neon-blue/30 to-neon-cyan/20',
+    borderGlow: 'hover:shadow-[0_0_40px_hsl(220_100%_60%_/_0.3)]',
     iconBg: 'bg-gradient-to-br from-neon-blue to-neon-cyan',
   },
   {
     icon: Zap,
     title: 'Entrega Instantánea',
     description: 'Recibe tus cuentas al instante después de ganar. Sin esperas, sin complicaciones',
+    gradient: 'from-yellow-500/30 to-orange-500/20',
+    borderGlow: 'hover:shadow-[0_0_40px_hsl(45_100%_50%_/_0.3)]',
     iconBg: 'bg-gradient-to-br from-yellow-500 to-orange-500',
   },
   {
     icon: Sparkles,
     title: 'Contenido Exclusivo',
     description: 'Accede a ofertas especiales, códigos de descuento y promociones solo para miembros',
+    gradient: 'from-neon-pink/30 to-neon-purple/20',
+    borderGlow: 'hover:shadow-[0_0_40px_hsl(330_100%_65%_/_0.3)]',
     iconBg: 'bg-gradient-to-br from-neon-pink to-neon-purple',
   },
   {
     icon: Clock,
     title: 'Actualizaciones 24/7',
     description: 'Nuevos sorteos y cuentas cada día. Nunca te quedarás sin oportunidades de ganar',
+    gradient: 'from-emerald-500/30 to-teal-500/20',
+    borderGlow: 'hover:shadow-[0_0_40px_hsl(160_100%_50%_/_0.3)]',
     iconBg: 'bg-gradient-to-br from-emerald-500 to-teal-500',
   },
 ]
@@ -58,17 +70,20 @@ export function BenefitsSection() {
           </p>
         </div>
 
+        {/* Benefits Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {benefits.map((benefit, index) => (
             <div
               key={benefit.title}
-              className="glass-card-hover p-6 sm:p-8 group"
+              className={`glass-card-hover p-6 sm:p-8 group ${benefit.borderGlow}`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className={`w-16 h-16 rounded-2xl ${benefit.iconBg} flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
-                <benefit.icon className="w-7 h-7 text-white" />
+              {/* Icon */}
+              <div className={`feature-icon ${benefit.iconBg} text-background mb-5 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                <benefit.icon className="w-7 h-7" />
               </div>
 
+              {/* Content */}
               <h3 className="font-heading text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3">
                 {benefit.title}
               </h3>
@@ -76,6 +91,7 @@ export function BenefitsSection() {
                 {benefit.description}
               </p>
 
+              {/* Badge */}
               <span className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-semibold bg-neon-green/20 text-neon-green border border-neon-green/30">
                 Incluido GRATIS
               </span>

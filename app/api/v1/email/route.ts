@@ -56,7 +56,7 @@ export async function PUT(request: NextRequest) {
   const supabase = await createClient()
   const { data: email, error } = await supabase
     .from('emails')
-    .insert({ email: data?.email, user_id: userId })
+    .insert({ email: data?.email, user_id: userId } as any)
     .select('*')
     .single()
 

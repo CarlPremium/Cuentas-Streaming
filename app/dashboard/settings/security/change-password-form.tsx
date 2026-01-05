@@ -223,7 +223,7 @@ const SubmitButton = ({
         const verified = await supabase.rpc('verify_user_password', {
           userid: user?.id,
           password: formValues?.oldPassword,
-        })
+        } as any)
         if (verified?.error) throw new Error(verified?.error?.message)
         if (verified?.data === false) {
           throw new Error('Old password does not match.')
