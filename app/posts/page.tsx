@@ -4,6 +4,7 @@ import { Search, Filter, Calendar, User, Tag as TagIcon, TrendingUp, Clock, Eye,
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { LinkvertiseAd } from '@/components/ads/linkvertise-ad'
 import { Paging, PagingProvider } from '@/components/paging'
 import {
   EntryTitle,
@@ -150,6 +151,14 @@ export default async function PostsPage({
         <div className="container py-12 sm:py-16 lg:py-20">
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="space-y-12">
+              {/* Top Ad */}
+              <div className="flex justify-center">
+                <LinkvertiseAd width={728} height={90} className="hidden md:block" />
+              </div>
+              <div className="flex justify-center md:hidden">
+                <LinkvertiseAd width={320} height={50} />
+              </div>
+
               {Array.isArray(posts) && posts?.length > 0 ? (
                 <>
                   <PostList posts={posts} />

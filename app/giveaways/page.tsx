@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { Gift, Users, Trophy } from 'lucide-react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { LinkvertiseAd } from '@/components/ads/linkvertise-ad'
 import GiveawayCard from './giveaway-card'
 import JoinGiveawayModal from './components/JoinGiveawayModal'
 import { createClient } from '@/supabase/client'
@@ -306,6 +307,14 @@ export default function GiveawaysPage() {
         {/* Giveaways Grid Section */}
         <div className="giveaways-grid-section">
           <div className="container py-12 sm:py-16">
+            {/* Top Ad */}
+            <div className="flex justify-center mb-12">
+              <LinkvertiseAd width={728} height={90} className="hidden md:block" />
+            </div>
+            <div className="flex justify-center mb-8 md:hidden">
+              <LinkvertiseAd width={320} height={50} />
+            </div>
+
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (

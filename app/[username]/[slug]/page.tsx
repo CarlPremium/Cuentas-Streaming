@@ -5,6 +5,7 @@ import { Calendar, User, Clock, Share2, Bookmark } from 'lucide-react'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { LinkvertiseAd } from '@/components/ads/linkvertise-ad'
 import { Forbidden } from '@/components/error'
 import { EntryPublished, EntryAuthor, EntryTags } from '@/components/hentry'
 import { JsonLd } from '@/components/seo/json-ld'
@@ -164,6 +165,14 @@ export default async function PostPage({
               />
             </div>
           )}
+
+          {/* Ad after cover image */}
+          <div className="flex justify-center my-8">
+            <LinkvertiseAd width={728} height={90} className="hidden md:block" />
+          </div>
+          <div className="flex justify-center my-6 md:hidden">
+            <LinkvertiseAd width={320} height={50} />
+          </div>
 
           {/* Content */}
           <PostContent className="post-content mb-12" __html={content} />
