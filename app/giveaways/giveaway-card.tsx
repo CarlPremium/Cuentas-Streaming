@@ -22,13 +22,18 @@ export default function GiveawayCard({ giveaway, onJoin }: GiveawayCardProps) {
   const endDate = new Date(giveaway.end_date)
   const now = new Date()
   const timeRemaining = endDate.getTime() - now.getTime()
-  const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24))
-  const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  const isEnding = daysRemaining === 0 && hoursRemaining < 24
+  const isExpired = timeRemaining <= 0
 
-  const timeString = daysRemaining > 0 
-    ? `${daysRemaining}d ${hoursRemaining}h`
-    : `${hoursRemaining}h ${Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60))}m`
+  const daysRemaining = Math.floor(Math.abs(timeRemaining) / (1000 * 60 * 60 * 24))
+  const hoursRemaining = Math.floor((Math.abs(timeRemaining) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  const minutesRemaining = Math.floor((Math.abs(timeRemaining) % (1000 * 60 * 60)) / (1000 * 60))
+  const isEnding = !isExpired && daysRemaining === 0 && hoursRemaining < 24
+
+  const timeString = isExpired
+    ? 'Finalizado'
+    : daysRemaining > 0
+      ? `${daysRemaining}d ${hoursRemaining}h`
+      : `${hoursRemaining}h ${minutesRemaining}m`
 
   // Get platform info from title
   const getPlatformInfo = () => {
@@ -168,22 +173,34 @@ export default function GiveawayCard({ giveaway, onJoin }: GiveawayCardProps) {
           <div className="flex items-center gap-2 min-w-0">
             <div
               className={`p-2 rounded-xl ${
-                isEnding ? 'bg-destructive/15' : 'bg-muted/30'
+                isExpired
+                  ? 'bg-muted/20'
+                  : isEnding
+                    ? 'bg-destructive/15'
+                    : 'bg-muted/30'
               }`}
             >
               <Clock
                 className={`w-4 h-4 ${
-                  isEnding
-                    ? 'text-destructive animate-pulse'
-                    : 'text-muted-foreground'
+                  isExpired
+                    ? 'text-muted-foreground'
+                    : isEnding
+                      ? 'text-destructive animate-pulse'
+                      : 'text-muted-foreground'
                 }`}
               />
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">Termina en</p>
+              <p className="text-xs text-muted-foreground">
+                {isExpired ? 'Sorteo' : 'Termina en'}
+              </p>
               <p
                 className={`font-mono font-bold text-sm ${
-                  isEnding ? 'text-destructive' : 'text-foreground'
+                  isExpired
+                    ? 'text-muted-foreground'
+                    : isEnding
+                      ? 'text-destructive'
+                      : 'text-foreground'
                 }`}
               >
                 {timeString}
@@ -194,19 +211,38 @@ export default function GiveawayCard({ giveaway, onJoin }: GiveawayCardProps) {
           <Button
             onClick={(e) => {
               e.stopPropagation()
-              onJoin()
+              if (!isExpired) {
+                onJoin()
+              }
             }}
-            className="font-bold px-5 sm:px-6 py-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 flex-shrink-0"
+            disabled={isExpired}
+            className="font-bold px-5 sm:px-6 py-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              background: 'linear-gradient(to right, hsl(180 100% 50%), hsl(150 100% 50%))',
-              color: 'hsl(222 47% 6%)',
+              background: isExpired
+                ? 'hsl(var(--muted))'
+                : 'linear-gradient(to right, hsl(180 100% 50%), hsl(150 100% 50%))',
+              color: isExpired ? 'hsl(var(--muted-foreground))' : 'hsl(222 47% 6%)',
               border: 'none',
-              boxShadow: '0 0 25px rgba(0,245,255,0.4)',
+              boxShadow: isExpired ? 'none' : '0 0 25px rgba(0,245,255,0.4)',
             }}
           >
-            <Zap className="w-4 h-4 mr-1.5" style={{ color: 'hsl(222 47% 6%)' }} />
-            <span className="hidden sm:inline" style={{ color: 'hsl(222 47% 6%)' }}>Participar</span>
-            <span className="sm:hidden" style={{ color: 'hsl(222 47% 6%)' }}>Unirse</span>
+            {isExpired ? (
+              <>
+                <Clock className="w-4 h-4 mr-1.5" />
+                <span className="hidden sm:inline">Finalizado</span>
+                <span className="sm:hidden">Cerrado</span>
+              </>
+            ) : (
+              <>
+                <Zap className="w-4 h-4 mr-1.5" style={{ color: 'hsl(222 47% 6%)' }} />
+                <span className="hidden sm:inline" style={{ color: 'hsl(222 47% 6%)' }}>
+                  Participar
+                </span>
+                <span className="sm:hidden" style={{ color: 'hsl(222 47% 6%)' }}>
+                  Unirse
+                </span>
+              </>
+            )}
           </Button>
         </div>
       </div>

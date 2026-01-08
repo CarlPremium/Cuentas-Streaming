@@ -252,12 +252,12 @@ export function GiveawaysManagementTable() {
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            onClick={() => router.push(`/giveaways/${giveaway.id}`)}
+                            onClick={() => router.push(`/dashboard/admin/giveaways/${giveaway.id}`)}
                           >
                             <LucideIcon name="Eye" className="mr-2 h-4 w-4" />
-                            View
+                            View Participants
                           </DropdownMenuItem>
-                          {giveaway.status === 'ended' && !giveaway.winner_guest_id && (
+                          {!giveaway.winner_guest_id && (
                             <DropdownMenuItem
                               onClick={() => handleSelectWinner(giveaway.id)}
                             >
@@ -265,6 +265,12 @@ export function GiveawaysManagementTable() {
                               Select Winner
                             </DropdownMenuItem>
                           )}
+                          <DropdownMenuItem
+                            onClick={() => router.push(`/dashboard/admin/giveaways/edit/${giveaway.id}`)}
+                          >
+                            <LucideIcon name="Pencil" className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handleDelete(giveaway.id)}

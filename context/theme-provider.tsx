@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { usePathname } from 'next/navigation'
 import { ThemeProvider as NextThemeProvider } from 'next-themes'
 
 interface ThemeProviderProps {
@@ -9,11 +10,14 @@ interface ThemeProviderProps {
 }
 
 const ThemeProvider = ({ children, value }: ThemeProviderProps) => {
+  const pathname = usePathname()
+  const isDashboard = pathname?.startsWith('/dashboard')
+
   return (
     <NextThemeProvider
       attribute="class"
-      defaultTheme="dark"
-      forcedTheme="dark"
+      defaultTheme={isDashboard ? 'light' : 'dark'}
+      forcedTheme={isDashboard ? undefined : 'dark'}
       enableSystem={false}
       disableTransitionOnChange
     >

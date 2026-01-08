@@ -20,7 +20,9 @@
       "Bash(pnpm dev)",
       "Bash(pnpm store prune:*)",
       "Bash(Select-Object -First 30)",
-      "Bash(Get-Date -Format \"yyyyMMdd_HHmmss\")"
+      "Bash(Get-Date -Format \"yyyyMMdd_HHmmss\")",
+      "Bash(Get-ChildItem -Path \"app/giveaways\" -Recurse -Filter \"*.tsx\")",
+      "Bash(Select-Object -First 10 FullName)"
     ],
     "deny": [],
     "ask": []

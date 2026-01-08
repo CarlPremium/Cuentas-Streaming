@@ -99,6 +99,39 @@ export async function POST(
     // Create Supabase client
     const supabase = await createClient()
 
+    // Get giveaway details to check if it's still active
+    const { data: giveaway, error: giveawayError } = await supabase
+      .from('giveaways')
+      .select('end_date, status, max_participants, giveaway_participants(count)')
+      .eq('id', giveawayId)
+      .is('deleted_at', null)
+      .single()
+
+    if (giveawayError || !giveaway) {
+      return NextResponse.json(
+        { error: 'Giveaway not found' },
+        { status: 404 }
+      )
+    }
+
+    // Check if giveaway has ended
+    const endDate = new Date(giveaway.end_date)
+    if (endDate < new Date()) {
+      return NextResponse.json(
+        { error: 'This giveaway has already ended' },
+        { status: 400 }
+      )
+    }
+
+    // Check if giveaway is at max capacity
+    const participantCount = giveaway.giveaway_participants?.[0]?.count || 0
+    if (giveaway.max_participants && participantCount >= giveaway.max_participants) {
+      return NextResponse.json(
+        { error: 'This giveaway has reached maximum capacity' },
+        { status: 400 }
+      )
+    }
+
     // Check if already participated (pre-check for better UX)
     const { data: checkData } = await supabase.rpc('check_participation', {
       p_giveaway_id: giveawayId,

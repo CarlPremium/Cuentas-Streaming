@@ -76,6 +76,151 @@ export async function GET(
 }
 
 /**
+ * Update giveaway
+ * PUT /api/v1/giveaway/[id]
+ * SECURITY: Admin only OR giveaway owner
+ */
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const giveawayId = parseInt(id)
+
+    if (isNaN(giveawayId)) {
+      return NextResponse.json(
+        { error: 'Invalid giveaway ID' },
+        { status: 400 }
+      )
+    }
+
+    // Check authentication
+    const { user } = await getUserAPI()
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const supabase = await createClient()
+
+    // Verify role from database (not client)
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (userError || !userData) {
+      console.error('Error fetching user role:', userError)
+      return NextResponse.json(
+        { error: 'Failed to verify permissions' },
+        { status: 500 }
+      )
+    }
+
+    // Get giveaway to check ownership
+    const { data: giveaway, error: giveawayError } = await supabase
+      .from('giveaways')
+      .select('user_id, title')
+      .eq('id', giveawayId)
+      .is('deleted_at', null)
+      .single()
+
+    if (giveawayError || !giveaway) {
+      return NextResponse.json(
+        { error: 'Giveaway not found' },
+        { status: 404 }
+      )
+    }
+
+    // Check permissions: owner OR admin
+    const isOwner = giveaway.user_id === user.id
+    const isAdmin = ['admin', 'superadmin'].includes(userData.role)
+
+    if (!isOwner && !isAdmin) {
+      console.warn(`Unauthorized update attempt by user ${user.id} for giveaway ${giveawayId}`)
+      return NextResponse.json(
+        { error: 'Forbidden. You do not have permission to edit this giveaway.' },
+        { status: 403 }
+      )
+    }
+
+    // Get update data from request body
+    const body = await request.json()
+    const {
+      title,
+      description,
+      thumbnail_url,
+      start_date,
+      end_date,
+      max_participants,
+      is_featured,
+      allow_guests,
+      require_email,
+      status,
+    } = body
+
+    // Build update object (only include provided fields)
+    const updateData: any = {}
+
+    if (title !== undefined) updateData.title = title
+    if (description !== undefined) updateData.description = description
+    if (thumbnail_url !== undefined) updateData.thumbnail_url = thumbnail_url
+    if (start_date !== undefined) updateData.start_date = start_date
+    if (end_date !== undefined) {
+      const endDate = new Date(end_date)
+      if (endDate <= new Date()) {
+        return NextResponse.json(
+          { error: 'End date must be in the future' },
+          { status: 400 }
+        )
+      }
+      updateData.end_date = endDate.toISOString()
+    }
+    if (max_participants !== undefined) updateData.max_participants = max_participants
+    if (is_featured !== undefined) updateData.is_featured = is_featured
+    if (allow_guests !== undefined) updateData.allow_guests = allow_guests
+    if (require_email !== undefined) updateData.require_email = require_email
+    if (status !== undefined) updateData.status = status
+
+    // Update giveaway
+    const { data: updatedGiveaway, error: updateError } = await supabase
+      .from('giveaways')
+      .update(updateData)
+      .eq('id', giveawayId)
+      .select()
+      .single()
+
+    if (updateError) {
+      console.error('Error updating giveaway:', updateError)
+      return NextResponse.json(
+        { error: 'Failed to update giveaway' },
+        { status: 500 }
+      )
+    }
+
+    console.log(`Giveaway ${giveawayId} updated by user ${user.id} (${isAdmin ? 'admin' : 'owner'})`)
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Giveaway updated successfully',
+        giveaway: updatedGiveaway
+      },
+      { status: 200 }
+    )
+
+  } catch (error) {
+    console.error('Error in update giveaway route:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+/**
  * Delete giveaway (soft delete)
  * DELETE /api/v1/giveaway/[id]
  * SECURITY: Admin only OR giveaway owner
