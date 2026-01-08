@@ -1,12 +1,1 @@
-{
-  "crons": [
-    {
-      "path": "/api/cron/daily-reset-posts",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/giveaways",
-      "schedule": "*/5 * * * *"
-    }
-  ]
-}
+{}
