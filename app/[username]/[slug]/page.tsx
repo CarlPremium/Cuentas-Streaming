@@ -24,9 +24,8 @@ import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
 import 'ckeditor5/ckeditor5.css'
 import '../../posts/blog-post.css'
 
-// revalidate the data at most every month
-// 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
-// export const revalidate = 2678400
+// Revalidate every 2 hours - published posts rarely change
+export const revalidate = 7200
 
 export async function generateMetadata(
   {

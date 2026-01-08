@@ -22,9 +22,8 @@ import { type Post } from '@/types/database'
 
 import './posts.css'
 
-// revalidate the data at most every week
-// 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
-export const revalidate = 0
+// Revalidate every 30 minutes for fresh content
+export const revalidate = 1800
 
 export async function generateMetadata({
   searchParams,

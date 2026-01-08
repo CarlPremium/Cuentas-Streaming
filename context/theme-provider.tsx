@@ -12,8 +12,9 @@ const ThemeProvider = ({ children, value }: ThemeProviderProps) => {
   return (
     <NextThemeProvider
       attribute="class"
-      defaultTheme={value?.theme}
-      enableSystem
+      defaultTheme="dark"
+      forcedTheme="dark"
+      enableSystem={false}
       disableTransitionOnChange
     >
       {children}

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
 
-import { Header } from '@/components/header'
+import { LandingHeader } from '@/components/landing/landing-header'
 import { HeroSection } from '@/components/landing/hero-section'
 import { BenefitsSection } from '@/components/landing/benefits-section'
 import { HowItWorksSection } from '@/components/landing/how-it-works-section'
@@ -22,7 +22,7 @@ export default function RootPage() {
     <>
       <JsonLd type="website" />
       <div className="min-h-screen bg-background overflow-x-hidden">
-        <Header />
+        <LandingHeader />
         <HeroSection />
         <BenefitsSection />
         <HowItWorksSection />

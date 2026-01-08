@@ -18,9 +18,8 @@ import { getPostsAPI } from '@/queries/server/posts'
 import { getTranslation } from '@/hooks/i18next'
 import { type Post } from '@/types/database'
 
-// revalidate the data at most every week
-// 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
-export const revalidate = 0
+// Revalidate every 10 minutes - search results can be cached briefly
+export const revalidate = 600
 
 export async function generateMetadata({
   searchParams,

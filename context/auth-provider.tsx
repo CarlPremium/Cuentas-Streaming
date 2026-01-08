@@ -27,15 +27,27 @@ const AuthContext = React.createContext<AuthContextProps | undefined>({
 const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   const [session, setSession] = React.useState<Session | null>(null)
   const [user, setUser] = React.useState<User | null>(null)
+  const [isLoading, setIsLoading] = React.useState(true)
 
   React.useEffect(() => {
     const supabase = createClient()
+
+    // Get initial session immediately
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+      setUser(session?.user ?? null)
+      setIsLoading(false)
+    })
+
+    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
+      setIsLoading(false)
     })
+
     return () => subscription?.unsubscribe()
   }, [])
 
@@ -43,6 +55,7 @@ const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
     return { session, user, setSession, setUser }
   }, [session, user])
 
+  // Don't block rendering while checking auth
   return (
     <AuthContext.Provider value={memoValue}>{children}</AuthContext.Provider>
   )

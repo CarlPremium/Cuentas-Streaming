@@ -186,3 +186,298 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* ========================================
+   COOKIE BANNER OVERRIDE FOR LANDING PAGE
+   ======================================== */
+
+/* Modern glassmorphism cookie banner for landing page */
+.landing-page .cookie-banner-card {
+  background: rgba(17, 24, 39, 0.85) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 80px rgba(128, 90, 213, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Cookie banner text colors */
+.landing-page .cookie-banner-card h3 {
+  color: hsl(210 40% 98%) !important;
+  font-weight: 700 !important;
+}
+
+.landing-page .cookie-banner-card p {
+  color: hsl(215 20% 75%) !important;
+}
+
+/* Cookie banner link */
+.landing-page .cookie-banner-card a {
+  color: hsl(180 100% 50%) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.landing-page .cookie-banner-card a:hover {
+  color: hsl(150 100% 50%) !important;
+  text-decoration: underline !important;
+}
+
+/* Cookie icon styling */
+.landing-page .cookie-banner-card svg {
+  color: hsl(180 100% 50%) !important;
+}
+
+/* Cookie banner buttons */
+.landing-page .cookie-banner-card button {
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Reject button */
+.landing-page .cookie-banner-card button[class*="outline"] {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: hsl(210 40% 98%) !important;
+}
+
+.landing-page .cookie-banner-card button[class*="outline"]:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Accept button with gradient */
+.landing-page .cookie-banner-card button[class*="gradient"] {
+  background: linear-gradient(135deg, hsl(180 100% 50%), hsl(150 100% 50%)) !important;
+  color: hsl(222 47% 6%) !important;
+  border: none !important;
+  box-shadow: 
+    0 4px 20px rgba(6, 182, 212, 0.4),
+    0 0 40px rgba(6, 182, 212, 0.2) !important;
+}
+
+.landing-page .cookie-banner-card button[class*="gradient"]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 6px 30px rgba(6, 182, 212, 0.6),
+    0 0 50px rgba(6, 182, 212, 0.3) !important;
+}
+
+/* Button icons */
+.landing-page .cookie-banner-card button svg {
+  color: currentColor !important;
+}
+
+/* Icon container */
+.landing-page .cookie-banner-card > div > div > div:first-child {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.2)) !important;
+  border: 1px solid rgba(6, 182, 212, 0.3) !important;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.2) !important;
+}
+
+/* Background glows */
+.landing-page .cookie-banner-card > div:first-child {
+  background: linear-gradient(135deg, rgba(128, 90, 213, 0.05), rgba(6, 182, 212, 0.05)) !important;
+}
+
+/* Animated entrance */
+@keyframes cookie-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.landing-page .cookie-banner-card {
+  animation: cookie-slide-up 0.5s ease-out !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .landing-page .cookie-banner-card {
+    margin: 0 !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+}
+
+/* ========================================
+   FIX BENEFIT ICONS - FORCE WHITE COLOR
+   ======================================== */
+
+/* Target benefit section icons specifically with highest specificity */
+.landing-page .glass-card-hover .feature-icon svg,
+.landing-page .glass-card-hover .feature-icon .lucide,
+.landing-page .glass-card-hover .feature-icon path {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+}
+
+/* Ensure the icon container maintains gradient background */
+.landing-page .feature-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Force white on all icon elements inside feature-icon */
+.landing-page .feature-icon * {
+  color: white !important;
+  stroke: white !important;
+}
+
+/* Override any conflicting styles */
+.landing-page [class*="bg-gradient"] .feature-icon svg,
+.landing-page [class*="bg-gradient"] .feature-icon .lucide {
+  color: white !important;
+  stroke: white !important;
+}
+
+/* ========================================
+   FIX ALL SECTION ICONS - COMPREHENSIVE
+   ======================================== */
+
+/* Stats Section - Force white icons */
+.landing-page .stat-card svg,
+.landing-page .stat-card .lucide,
+.landing-page .stat-card path {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+}
+
+/* How It Works Section - Ensure white icons */
+.landing-page .glass-card-hover svg,
+.landing-page .glass-card-hover .lucide,
+.landing-page .glass-card-hover path {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+}
+
+/* CTA Section - All icons white */
+.landing-page .glass-card svg,
+.landing-page .glass-card .lucide,
+.landing-page .glass-card path {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+}
+
+/* CTA Buttons - Primary button icons */
+.landing-page .btn-primary svg,
+.landing-page .btn-primary .lucide,
+.landing-page .btn-primary path {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+}
+
+/* CTA Buttons - Secondary button icons */
+.landing-page .btn-secondary svg,
+.landing-page .btn-secondary .lucide {
+  color: currentColor !important;
+}
+
+/* Feature cards in CTA */
+.landing-page .bg-secondary svg,
+.landing-page .bg-secondary .lucide,
+.landing-page [class*="bg-secondary"] svg,
+.landing-page [class*="bg-secondary"] .lucide {
+  color: inherit !important;
+}
+
+/* Checkmark icons */
+.landing-page .text-neon-green svg,
+.landing-page .text-neon-green .lucide {
+  color: hsl(150 100% 50%) !important;
+  stroke: hsl(150 100% 50%) !important;
+}
+
+/* All gradient backgrounds should have white icons */
+.landing-page [class*="bg-gradient-to-br"] svg,
+.landing-page [class*="bg-gradient-to-br"] .lucide,
+.landing-page [class*="bg-gradient-to-br"] path,
+.landing-page [class*="bg-gradient-to-r"] svg,
+.landing-page [class*="bg-gradient-to-r"] .lucide,
+.landing-page [class*="bg-gradient-to-r"] path,
+.landing-page [class*="bg-gradient-to-l"] svg,
+.landing-page [class*="bg-gradient-to-l"] .lucide,
+.landing-page [class*="bg-gradient-to-l"] path {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+}
+
+/* Rounded containers with gradients */
+.landing-page [class*="rounded-"] > [class*="bg-gradient"] svg,
+.landing-page [class*="rounded-"] > [class*="bg-gradient"] .lucide {
+  color: white !important;
+  stroke: white !important;
+}
+
+/* Step number circles - keep muted */
+.landing-page .glass-card-hover .text-muted-foreground {
+  color: hsl(215 20% 70%) !important;
+}
+
+/* Override any remaining black/dark icons */
+.landing-page svg[class*="text-background"],
+.landing-page .lucide[class*="text-background"] {
+  color: white !important;
+  stroke: white !important;
+}
+
+.landing-page svg[class*="text-foreground"]:not(.text-neon-green),
+.landing-page .lucide[class*="text-foreground"]:not(.text-neon-green) {
+  color: white !important;
+  stroke: white !important;
+}
+
+/* Button content text */
+.landing-page button[class*="btn-primary"] {
+  color: white !important;
+}
+
+.landing-page button[class*="btn-primary"] span {
+  color: white !important;
+}
+
+.landing-page button[class*="btn-primary"] * {
+  color: white !important;
+}
+
+/* Ensure all SVG paths are visible */
+.landing-page svg path {
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+/* Final catch-all for any missed icons */
+.landing-page [class*="w-"] svg,
+.landing-page [class*="h-"] svg {
+  color: inherit !important;
+}
+
+/* Make sure text inside gradients is white */
+.landing-page [class*="bg-gradient"] * {
+  color: white !important;
+}
+
+/* Exception for text content (not icons) */
+.landing-page .font-heading,
+.landing-page h1, .landing-page h2, .landing-page h3,
+.landing-page h4, .landing-page h5, .landing-page h6,
+.landing-page p, .landing-page span:not(:has(svg)) {
+  color: revert !important;
+}

@@ -79,8 +79,8 @@ export function BenefitsSection() {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Icon */}
-              <div className={`feature-icon ${benefit.iconBg} text-background mb-5 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                <benefit.icon className="w-7 h-7" />
+              <div className={`feature-icon ${benefit.iconBg} mb-5 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                <benefit.icon className="w-7 h-7 text-white" strokeWidth={2} />
               </div>
 
               {/* Content */}

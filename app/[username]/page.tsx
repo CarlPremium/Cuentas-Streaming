@@ -15,9 +15,8 @@ import { getUserAPI } from '@/queries/server/users'
 
 import './profile.css'
 
-// revalidate the data at most every week
-// 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
-export const revalidate = 0
+// Revalidate every hour - profiles don't change often
+export const revalidate = 3600
 
 export async function generateMetadata(
   {
