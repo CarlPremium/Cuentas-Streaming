@@ -84,7 +84,7 @@ export default async function StorePage({
           <div className="hero-bg-orb hero-bg-orb-2" />
           <div className="hero-bg-orb hero-bg-orb-3" />
 
-          <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center py-20">
+          <div className="container relative z-10 flex min-h-[60vh] flex-col items-center justify-center py-16">
             {/* Floating Badge */}
             <div className="hero-badge animate-float">
               <ShoppingBag className="h-5 w-5 text-primary" />
