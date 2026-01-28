@@ -41,6 +41,8 @@ interface Giveaway {
   max_participants: number | null
   is_featured: boolean
   winner_guest_id: string | null
+  winner_telegram_handle?: string | null
+  winner_name?: string | null
 }
 
 export function GiveawaysManagementTable() {
@@ -83,8 +85,13 @@ export function GiveawaysManagementTable() {
       const data = await response.json()
 
       if (response.ok && data.success) {
+        const winnerInfo = data.telegram_handle 
+          ? `${data.telegram_handle}${data.winner_name ? ` (${data.winner_name})` : ''}`
+          : `ID: ${data.winner_guest_id || data.winner_id}`
+        
         toast.success('Winner selected!', {
-          description: `Winner ID: ${data.winner_guest_id || data.winner_id}`,
+          description: `Winner: ${winnerInfo}`,
+          duration: 10000,
         })
         fetchGiveaways()
       } else {
@@ -225,10 +232,22 @@ export function GiveawaysManagementTable() {
                     </TableCell>
                     <TableCell>
                       {giveaway.winner_guest_id ? (
-                        <Badge variant="outline" className="gap-1">
-                          <LucideIcon name="Trophy" className="h-3 w-3" />
-                          Selected
-                        </Badge>
+                        <div className="flex flex-col gap-1">
+                          <Badge variant="outline" className="gap-1 w-fit">
+                            <LucideIcon name="Trophy" className="h-3 w-3" />
+                            Winner
+                          </Badge>
+                          {giveaway.winner_telegram_handle && (
+                            <span className="text-sm font-mono text-primary">
+                              {giveaway.winner_telegram_handle}
+                            </span>
+                          )}
+                          {giveaway.winner_name && (
+                            <span className="text-xs text-muted-foreground">
+                              {giveaway.winner_name}
+                            </span>
+                          )}
+                        </div>
                       ) : (
                         <span className="text-sm text-muted-foreground">-</span>
                       )}

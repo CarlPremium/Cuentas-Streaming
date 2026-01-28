@@ -70,6 +70,8 @@ export async function POST(
       error?: string
       winner_id?: string
       winner_guest_id?: string
+      winner_name?: string
+      telegram_handle?: string
     }
 
     if (!result.success) {
@@ -80,6 +82,8 @@ export async function POST(
       success: true,
       winner_id: result.winner_id,
       winner_guest_id: result.winner_guest_id,
+      winner_name: result.winner_name,
+      telegram_handle: result.telegram_handle,
     })
   } catch (error) {
     console.error('Unexpected error in select winner:', error)
